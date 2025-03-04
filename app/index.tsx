@@ -1,8 +1,14 @@
-import { StyleSheet, View } from 'react-native';
-import { Button, Text, SegmentedButtons } from 'react-native-paper';
+import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
+import { Button, Text, Card, Surface } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { useDeckStore } from '../src/zustand_state_store/deckStore';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
+import { Deck } from '../src/mock/decks';
+
+const COLUMN_COUNT = 2;
+const SPACING = 8;
+const screenWidth = Dimensions.get('window').width;
+const cardWidth = (screenWidth - (COLUMN_COUNT + 1) * SPACING * 2) / COLUMN_COUNT;
 
 export default function HomeScreen() {
   const decks = useDeckStore((state) => state.decks);
@@ -17,29 +23,43 @@ export default function HomeScreen() {
     }
   };
 
+  const renderDeckCard = ({ item: deck }: { item: Deck }) => (
+    <Card
+      style={[
+        styles.card,
+        selectedDeck?.id === deck.id && styles.selectedCard,
+      ]}
+      onPress={() => setSelectedDeck(deck)}
+    >
+      <Card.Content>
+        <Text variant="titleMedium" style={styles.cardTitle}>
+          {deck.title}
+        </Text>
+        <Text variant="bodyMedium" style={styles.cardDescription}>
+          {deck.words.length} words
+        </Text>
+        <Text variant="bodySmall" numberOfLines={2} style={styles.cardDescription}>
+          {deck.description}
+        </Text>
+      </Card.Content>
+    </Card>
+  );
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Heads Up!' }} />
       <Text variant="headlineLarge" style={styles.title}>
         Heads Up!
       </Text>
-      
-      <View style={styles.deckSelection}>
-        <Text variant="titleMedium" style={styles.subtitle}>
-          Select a Deck
-        </Text>
-        <SegmentedButtons
-          value={selectedDeck?.id || ''}
-          onValueChange={(value) => {
-            const deck = decks.find((d) => d.id === value);
-            if (deck) setSelectedDeck(deck);
-          }}
-          buttons={decks.map((deck) => ({
-            value: deck.id,
-            label: deck.title,
-          }))}
-        />
-      </View>
+
+      <FlatList
+        data={decks}
+        renderItem={renderDeckCard}
+        keyExtractor={(item) => item.id}
+        numColumns={COLUMN_COUNT}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={styles.grid}
+      />
 
       <View style={styles.buttonContainer}>
         <Button
@@ -65,26 +85,39 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+    padding: SPACING * 2,
   },
   title: {
-    marginBottom: 40,
+    textAlign: 'center',
+    marginBottom: SPACING * 4,
   },
-  subtitle: {
-    marginBottom: 16,
+  grid: {
+    paddingBottom: SPACING * 2,
   },
-  deckSelection: {
-    width: '100%',
-    maxWidth: 300,
-    marginBottom: 40,
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: SPACING * 2,
+  },
+  card: {
+    width: cardWidth,
+    marginHorizontal: 0,
+  },
+  selectedCard: {
+    backgroundColor: '#e8f0fe',
+    borderColor: '#1a73e8',
+    borderWidth: 2,
+  },
+  cardTitle: {
+    marginBottom: 4,
+  },
+  cardDescription: {
+    marginBottom: 4,
   },
   buttonContainer: {
-    width: '100%',
-    maxWidth: 300,
+    marginTop: 'auto',
+    gap: SPACING,
   },
   button: {
-    marginVertical: 10,
+    width: '100%',
   },
 });

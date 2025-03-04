@@ -12,7 +12,7 @@
      ```
 
 2. Set up Zustand for state management
-   - Create `src/store` directory
+   - Create `src/zustand_state_store` directory
    - Create basic store with game state:
      - Current deck
      - Game timer
