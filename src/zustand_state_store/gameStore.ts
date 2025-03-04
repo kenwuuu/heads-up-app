@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Deck, Word } from '../mock/decks';
+import { DEFAULT_GAME_DURATION_SECONDS } from '../constants/game';
 
 interface GameState {
   // Selected deck
@@ -32,9 +33,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   isPlaying: false,
   currentWord: null,
   score: 0,
-  timeLeft: 60,
+  gameDuration: DEFAULT_GAME_DURATION_SECONDS,
+  timeLeft: DEFAULT_GAME_DURATION_SECONDS,
   roundWords: [],
-  gameDuration: 60,
 
   // Deck selection
   setSelectedDeck: (deck) => set({ selectedDeck: deck }),
