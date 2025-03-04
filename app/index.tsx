@@ -1,5 +1,5 @@
 import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
-import { Button, Text, Card, Surface } from 'react-native-paper';
+import { Button, Text, Card, Surface, IconButton } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { useDeckStore } from '../src/zustand_state_store/deckStore';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
@@ -47,7 +47,17 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Heads Up!' }} />
+      <Stack.Screen 
+        options={{ 
+          title: 'Heads Up!',
+          headerRight: () => (
+            <IconButton
+              icon="cog"
+              onPress={() => router.push('/settings')}
+            />
+          ),
+        }} 
+      />
       <Text variant="headlineLarge" style={styles.title}>
         Heads Up!
       </Text>

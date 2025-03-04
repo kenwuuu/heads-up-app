@@ -6,6 +6,10 @@ interface GameState {
   selectedDeck: Deck | null;
   setSelectedDeck: (deck: Deck) => void;
 
+  // Game settings
+  gameDuration: number;
+  setGameDuration: (seconds: number) => void;
+
   // Game state
   isPlaying: boolean;
   currentWord: Word | null;
@@ -30,19 +34,24 @@ export const useGameStore = create<GameState>((set, get) => ({
   score: 0,
   timeLeft: 60,
   roundWords: [],
+  gameDuration: 60,
 
   // Deck selection
   setSelectedDeck: (deck) => set({ selectedDeck: deck }),
 
+  // Game settings
+  setGameDuration: (seconds) => set({ gameDuration: seconds }),
+
   // Game actions
   startGame: (deck) => {
+    const { gameDuration } = get();
     const shuffledWords = [...deck.words].sort(() => Math.random() - 0.5);
     set({
       selectedDeck: deck,
       isPlaying: true,
       currentWord: shuffledWords[0],
       score: 0,
-      timeLeft: 60,
+      timeLeft: gameDuration,
       roundWords: shuffledWords,
     });
   },
@@ -83,11 +92,12 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   resetGame: () => {
+    const { gameDuration } = get();
     set({
       isPlaying: false,
       currentWord: null,
       score: 0,
-      timeLeft: 60,
+      timeLeft: gameDuration,
       roundWords: [],
     });
   },
