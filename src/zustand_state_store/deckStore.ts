@@ -1,0 +1,37 @@
+import { create } from 'zustand';
+import { Deck, mockDecks } from '../mock/decks';
+
+interface DeckState {
+  // Deck management
+  decks: Deck[];
+  addDeck: (deck: Deck) => void;
+  updateDeck: (deck: Deck) => void;
+  deleteDeck: (deckId: string) => void;
+}
+
+export const useDeckStore = create<DeckState>((set, get) => ({
+  // Initial state with mock decks
+  decks: mockDecks,
+
+  // Deck management actions
+  addDeck: (deck) => {
+    const { decks } = get();
+    set({ decks: [...decks, deck] });
+  },
+
+  updateDeck: (updatedDeck) => {
+    const { decks } = get();
+    set({
+      decks: decks.map((deck) =>
+        deck.id === updatedDeck.id ? updatedDeck : deck
+      ),
+    });
+  },
+
+  deleteDeck: (deckId) => {
+    const { decks } = get();
+    set({
+      decks: decks.filter((deck) => deck.id !== deckId),
+    });
+  },
+})); 
