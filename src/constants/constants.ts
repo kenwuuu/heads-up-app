@@ -1,5 +1,5 @@
 // Game UI constants
-export const DEFAULT_GAME_DURATION_SECONDS = 1;
+export const DEFAULT_GAME_DURATION_SECONDS = 5;
 export const MINIMUM_GAME_DURATION_SECONDS = 1;
 export const DEFAULT_READY_TEXT = 'Ready?';
 
@@ -28,4 +28,10 @@ export const BUTTON_COLORS = {
 export const MAX_BUTTON_CONTAINER_WIDTH = 300;
 
 // Text colors
-export const HINT_TEXT_COLOR = '#666'; 
+export const HINT_TEXT_COLOR = '#666';
+
+// Audio constants
+export const AUDIO_CONFIG = {
+  PLAYS_IN_SILENT_MODE_IOS: true,
+  STAYS_ACTIVE_IN_BACKGROUND: false,
+};

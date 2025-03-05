@@ -117,9 +117,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   selectedCard: {
-    backgroundColor: SELECTED_CARD_STYLES.BACKGROUND_COLOR,
-    borderColor: SELECTED_CARD_STYLES.BORDER_COLOR,
-    borderWidth: SELECTED_CARD_STYLES.BORDER_WIDTH,
+    
+    // BACKGROUND_COLOR: '#e8f0fe',
+    // BORDER_COLOR: '#1a73e8',
+  // BORDER_WIDTH: 2,
+    backgroundColor: '#e8f0fe',
+    borderColor: '#1a73e8',
+    borderWidth: 2,
   },
   cardTitle: {
     marginBottom: 4,

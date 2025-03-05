@@ -2,8 +2,13 @@ import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Surface, Button } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
+import { Audio, AVPlaybackStatus } from 'expo-av';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
-import { BUTTON_COLORS, DEFAULT_READY_TEXT } from '../src/constants/constants';
+import { 
+  BUTTON_COLORS, 
+  DEFAULT_READY_TEXT, 
+  AUDIO_CONFIG
+} from '../src/constants/constants';
 
 export default function GameScreen() {
   const { 
@@ -15,6 +20,35 @@ export default function GameScreen() {
     markIncorrect,
     endGame
   } = useGameStore();
+
+  // Initialize audio
+  useEffect(() => {
+    Audio.setAudioModeAsync({
+      playsInSilentModeIOS: AUDIO_CONFIG.PLAYS_IN_SILENT_MODE_IOS,
+      staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
+    });
+  }, []);
+
+  // Sound feedback function
+  const playSound = async (isCorrect: boolean) => {
+    try {
+      const soundObject = new Audio.Sound();
+      const soundFile = isCorrect
+        ? require('../assets/sounds/correct.mp3')
+        : require('../assets/sounds/incorrect.mp3');
+        
+      await soundObject.loadAsync(soundFile);
+      await soundObject.playAsync();
+      // Unload sound after playing
+      soundObject.setOnPlaybackStatusUpdate(async (status: AVPlaybackStatus) => {
+        if ('didJustFinish' in status && status.didJustFinish) {
+          await soundObject.unloadAsync();
+        }
+      });
+    } catch (error) {
+      console.log('Error playing sound:', error);
+    }
+  };
 
   // Timer effect
   useEffect(() => {
@@ -32,19 +66,30 @@ export default function GameScreen() {
     }
   }, [timeLeft, isPlaying, score]);
 
+  // Handle correct/incorrect with sound
+  const handleCorrect = async () => {
+    await playSound(true);
+    markCorrect();
+  };
+
+  const handleIncorrect = async () => {
+    await playSound(false);
+    markIncorrect();
+  };
+
   // Temporary buttons for testing (will be replaced with gyroscope controls)
   const renderControls = () => (
     <View style={styles.controls}>
       <Button
         mode="contained"
-        onPress={markCorrect}
+        onPress={handleCorrect}
         style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.CORRECT }]}
       >
         Correct
       </Button>
       <Button
         mode="contained"
-        onPress={markIncorrect}
+        onPress={handleIncorrect}
         style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.INCORRECT }]}
       >
         Pass
