@@ -1,10 +1,12 @@
 import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
+import { useGameStore } from '../src/zustand_state_store/gameStore';
 
 export default function ResultsScreen() {
   const { score } = useLocalSearchParams<{ score: string }>();
   const scoreNumber = parseInt(score || '0', 10);
+  const { selectedDeck, startGame } = useGameStore();
 
   return (
     <View style={styles.container}>
@@ -18,7 +20,12 @@ export default function ResultsScreen() {
       <View style={styles.buttonContainer}>
         <Button
           mode="contained"
-          onPress={() => router.replace('/game')}
+          onPress={() => {
+            if (selectedDeck) {
+              startGame(selectedDeck);
+              router.replace('/game');
+            }
+          }}
           style={styles.button}
         >
           Play Again
