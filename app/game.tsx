@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Surface, Button, IconButton } from 'react-native-paper';
+import { Text, Surface, Button } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { Audio, AVPlaybackStatus } from 'expo-av';
-import * as Haptics from 'expo-haptics';
 import { DeviceMotion } from 'expo-sensors';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
 import { 
@@ -11,6 +10,10 @@ import {
   DEFAULT_READY_TEXT, 
   AUDIO_CONFIG
 } from '../src/constants/constants';
+
+// Constants for tilt detection
+const TILT_THRESHOLD = 65; // degrees
+const DEBOUNCE_TIME = 500; // milliseconds
 
 export default function GameScreen() {
   const { 
@@ -23,102 +26,41 @@ export default function GameScreen() {
     endGame
   } = useGameStore();
 
-  const [subscription, setSubscription] = useState<any>(null);
-  const [lastAction, setLastAction] = useState<number | null>(null);
-  const TILT_THRESHOLD = 45; // Degrees of tilt required to trigger action
-  const COOLDOWN_TIME = 1000; // Milliseconds to wait before allowing another action
+  const [lastActionTime, setLastActionTime] = useState(0);
+  const [currentTilt, setCurrentTilt] = useState(0);
 
-  // Initialize sensors and audio
+  // Initialize audio and motion sensors
   useEffect(() => {
-    DeviceMotion.setUpdateInterval(100); // Update every 100ms
-    
     Audio.setAudioModeAsync({
       staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
     });
 
+    // Start listening to DeviceMotion updates
+    DeviceMotion.setUpdateInterval(100); // Update every 100ms
     const subscription = DeviceMotion.addListener(({ rotation }) => {
-      if (!isPlaying || !rotation) return;
-      
-      const now = Date.now();
-      const gamma = ((rotation.gamma * 180) / Math.PI) + 90; // Convert to degrees and adjust for vertical position
-      
-      // Only allow actions if cooldown has passed
-      if (lastAction && now - lastAction < COOLDOWN_TIME) return;
+      // Convert radians to degrees and get the tilt angle
+      // When phone is held on left edge, we use beta rotation (around X-axis)
+      const tiltDegrees = (rotation.gamma * 180) / Math.PI;
+      setCurrentTilt(tiltDegrees);
 
-      // Tilting right from vertical (positive gamma)
-      if (gamma > TILT_THRESHOLD) {
+      const now = Date.now();
+      if (now - lastActionTime < DEBOUNCE_TIME) return;
+
+      // Check for tilt thresholds
+      if (tiltDegrees >= TILT_THRESHOLD) {
         handleCorrect();
-        setLastAction(now);
-      }
-      // Tilting left from vertical (negative gamma)
-      else if (gamma < -TILT_THRESHOLD) {
+        setLastActionTime(now);
+      } else if (tiltDegrees <= -TILT_THRESHOLD) {
         handleIncorrect();
-        setLastAction(now);
+        setLastActionTime(now);
       }
     });
-
-    setSubscription(subscription);
 
     return () => {
       subscription.remove();
     };
-  }, [isPlaying, lastAction]);
+  }, [lastActionTime]);
 
-  // Timer effect
-  useEffect(() => {
-    if (timeLeft > 0 && isPlaying) {
-      const timer = setInterval(() => {
-        useGameStore.setState((state) => ({ timeLeft: state.timeLeft - 1 }));
-      }, 1000);
-      return () => clearInterval(timer);
-    } else if (timeLeft === 0) {
-      endGame();
-      router.navigate({
-        pathname: '/results',
-        params: { score }
-      });
-    }
-  }, [timeLeft, isPlaying, score]);
-
-  // Handle correct/incorrect with sound and haptics
-  const handleCorrect = async () => {
-    const isCorrect = true;
-    await Promise.all([
-      playSound(isCorrect),
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-    ]);
-    markCorrect();
-  };
-
-  const handleIncorrect = async () => {
-    const isCorrect = false;
-    await Promise.all([
-      playSound(isCorrect),
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-    ]);
-    markIncorrect();
-  };
-
-  // Temporary buttons for testing (will be replaced with gyroscope controls)
-  const renderControls = () => (
-    <View style={styles.controls}>
-      <Button
-        mode="contained"
-        onPress={handleCorrect}
-        style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.CORRECT }]}
-      >
-        Correct
-      </Button>
-      <Button
-        mode="contained"
-        onPress={handleIncorrect}
-        style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.INCORRECT }]}
-      >
-        Pass
-      </Button>
-    </View>
-  );
-  
   // Sound feedback function
   const playSound = async (isCorrect: boolean) => {
     try {
@@ -140,19 +82,44 @@ export default function GameScreen() {
     }
   };
 
+  // Timer effect
+  useEffect(() => {
+    if (timeLeft > 0 && isPlaying) {
+      const timer = setInterval(() => {
+        useGameStore.setState((state) => ({ timeLeft: state.timeLeft - 1 }));
+      }, 1000);
+      return () => clearInterval(timer);
+    } else if (timeLeft === 0) {
+      endGame();
+      router.replace({
+        pathname: '/results',
+        params: { score }
+      });
+    }
+  }, [timeLeft, isPlaying, score]);
+
+  // Handle correct/incorrect with sound
+  const handleCorrect = async () => {
+    await playSound(true);
+    markCorrect();
+  };
+
+  const handleIncorrect = async () => {
+    await playSound(false);
+    markIncorrect();
+  };
+
+  // Visual tilt indicator
+  const getTiltIndicator = () => {
+    if (Math.abs(currentTilt) < 10) return "Neutral";
+    if (currentTilt >= TILT_THRESHOLD) return "✓ Correct!";
+    if (currentTilt <= -TILT_THRESHOLD) return "✗ Pass!";
+    return currentTilt > 0 ? "Tilting Up..." : "Tilting Down...";
+  };
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Play' }} />
-      <IconButton
-        icon="home"
-        iconColor="#f4511e"
-        size={30}
-        style={styles.homeButton}
-        onPress={() => {
-          endGame();
-          router.navigate('/');
-        }}
-      />
       <Text variant="headlineMedium" style={styles.timer}>
         {timeLeft}s
       </Text>
@@ -164,7 +131,16 @@ export default function GameScreen() {
       <Text variant="titleLarge" style={styles.score}>
         Score: {score}
       </Text>
-      {renderControls()}
+      <Text 
+        variant="titleMedium" 
+        style={[
+          styles.tiltIndicator,
+          currentTilt >= TILT_THRESHOLD && styles.correctTilt,
+          currentTilt <= -TILT_THRESHOLD && styles.incorrectTilt
+        ]}
+      >
+        {getTiltIndicator()}
+      </Text>
     </View>
   );
 }
@@ -175,21 +151,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-  },
-  homeButton: {
-    position: 'absolute',
-    left: 10,
-    top: 10,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
   },
   timer: {
     marginTop: 20,
@@ -207,13 +168,14 @@ const styles = StyleSheet.create({
   score: {
     marginBottom: 20,
   },
-  controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 20,
+  tiltIndicator: {
+    marginBottom: 40,
+    fontWeight: 'bold',
   },
-  controlButton: {
-    width: '45%',
+  correctTilt: {
+    color: BUTTON_COLORS.CORRECT,
+  },
+  incorrectTilt: {
+    color: BUTTON_COLORS.INCORRECT,
   },
 }); 
