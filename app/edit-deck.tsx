@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { useState, useRef } from 'react';
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Button, Text, TextInput, IconButton } from 'react-native-paper';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useDeckStore } from '../src/zustand_state_store/deckStore';
@@ -10,6 +10,7 @@ export default function EditDeckScreen() {
   const decks = useDeckStore((state) => state.decks);
   const addDeck = useDeckStore((state) => state.addDeck);
   const updateDeck = useDeckStore((state) => state.updateDeck);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const existingDeck = decks.find((d) => d.id === deckId);
   const [title, setTitle] = useState(existingDeck?.title || '');
@@ -54,13 +55,22 @@ export default function EditDeckScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 24}
+    >
       <Stack.Screen
         options={{
           title: existingDeck ? 'Edit Deck' : 'New Deck',
         }}
       />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView 
+        ref={scrollViewRef}
+        style={styles.scrollView}
+        keyboardShouldPersistTaps="handled"
+        onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+      >
         <TextInput
           label="Deck Title"
           value={title}
@@ -115,7 +125,7 @@ export default function EditDeckScreen() {
           Cancel
         </Button>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
