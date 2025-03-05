@@ -1,14 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Surface, Button } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { Audio, AVPlaybackStatus } from 'expo-av';
+import { DeviceMotion } from 'expo-sensors';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
 import { 
   BUTTON_COLORS, 
   DEFAULT_READY_TEXT, 
   AUDIO_CONFIG
 } from '../src/constants/constants';
+
+// Constants for tilt detection
+const TILT_THRESHOLD = 65; // degrees
+const DEBOUNCE_TIME = 500; // milliseconds
 
 export default function GameScreen() {
   const { 
@@ -21,12 +26,40 @@ export default function GameScreen() {
     endGame
   } = useGameStore();
 
-  // Initialize audio
+  const [lastActionTime, setLastActionTime] = useState(0);
+  const [currentTilt, setCurrentTilt] = useState(0);
+
+  // Initialize audio and motion sensors
   useEffect(() => {
     Audio.setAudioModeAsync({
       staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
     });
-  }, []);
+
+    // Start listening to DeviceMotion updates
+    DeviceMotion.setUpdateInterval(100); // Update every 100ms
+    const subscription = DeviceMotion.addListener(({ rotation }) => {
+      // Convert radians to degrees and get the tilt angle
+      // When phone is held on left edge, we use beta rotation (around X-axis)
+      const tiltDegrees = (rotation.gamma * 180) / Math.PI;
+      setCurrentTilt(tiltDegrees);
+
+      const now = Date.now();
+      if (now - lastActionTime < DEBOUNCE_TIME) return;
+
+      // Check for tilt thresholds
+      if (tiltDegrees >= TILT_THRESHOLD) {
+        handleCorrect();
+        setLastActionTime(now);
+      } else if (tiltDegrees <= -TILT_THRESHOLD) {
+        handleIncorrect();
+        setLastActionTime(now);
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [lastActionTime]);
 
   // Sound feedback function
   const playSound = async (isCorrect: boolean) => {
@@ -76,25 +109,13 @@ export default function GameScreen() {
     markIncorrect();
   };
 
-  // Temporary buttons for testing (will be replaced with gyroscope controls)
-  const renderControls = () => (
-    <View style={styles.controls}>
-      <Button
-        mode="contained"
-        onPress={handleCorrect}
-        style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.CORRECT }]}
-      >
-        Correct
-      </Button>
-      <Button
-        mode="contained"
-        onPress={handleIncorrect}
-        style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.INCORRECT }]}
-      >
-        Pass
-      </Button>
-    </View>
-  );
+  // Visual tilt indicator
+  const getTiltIndicator = () => {
+    if (Math.abs(currentTilt) < 10) return "Neutral";
+    if (currentTilt >= TILT_THRESHOLD) return "✓ Correct!";
+    if (currentTilt <= -TILT_THRESHOLD) return "✗ Pass!";
+    return currentTilt > 0 ? "Tilting Up..." : "Tilting Down...";
+  };
 
   return (
     <View style={styles.container}>
@@ -110,7 +131,16 @@ export default function GameScreen() {
       <Text variant="titleLarge" style={styles.score}>
         Score: {score}
       </Text>
-      {renderControls()}
+      <Text 
+        variant="titleMedium" 
+        style={[
+          styles.tiltIndicator,
+          currentTilt >= TILT_THRESHOLD && styles.correctTilt,
+          currentTilt <= -TILT_THRESHOLD && styles.incorrectTilt
+        ]}
+      >
+        {getTiltIndicator()}
+      </Text>
     </View>
   );
 }
@@ -138,13 +168,14 @@ const styles = StyleSheet.create({
   score: {
     marginBottom: 20,
   },
-  controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 20,
+  tiltIndicator: {
+    marginBottom: 40,
+    fontWeight: 'bold',
   },
-  controlButton: {
-    width: '45%',
+  correctTilt: {
+    color: BUTTON_COLORS.CORRECT,
+  },
+  incorrectTilt: {
+    color: BUTTON_COLORS.INCORRECT,
   },
 }); 
