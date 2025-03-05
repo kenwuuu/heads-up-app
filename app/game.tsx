@@ -59,7 +59,7 @@ export default function GameScreen() {
       return () => clearInterval(timer);
     } else if (timeLeft === 0) {
       endGame();
-      router.replace({
+      router.navigate({
         pathname: '/results',
         params: { score }
       });

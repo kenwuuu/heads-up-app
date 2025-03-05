@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Button, Text, TextInput, Portal, Modal } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
@@ -19,46 +19,48 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Game Settings' }} />
-      
-      <View style={styles.section}>
-        <Text variant="titleMedium" style={styles.sectionTitle}>
-          Game Duration
-        </Text>
-        <TextInput
-          label="Seconds"
-          value={durationInput}
-          onChangeText={setDurationInput}
-          keyboardType="number-pad"
-          style={styles.input}
-        />
-        <Text variant="bodySmall" style={styles.hint}>
-          Enter the number of seconds for each round (minimum: {MINIMUM_GAME_DURATION_SECONDS}s)
-        </Text>
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <Stack.Screen options={{ title: 'Game Settings' }} />
+        
+        <View style={styles.section}>
+          <Text variant="titleMedium" style={styles.sectionTitle}>
+            Game Duration
+          </Text>
+          <TextInput
+            label="Seconds"
+            value={durationInput}
+            onChangeText={setDurationInput}
+            keyboardType="number-pad"
+            style={styles.input}
+          />
+          <Text variant="bodySmall" style={styles.hint}>
+            Enter the number of seconds for each round (minimum: {MINIMUM_GAME_DURATION_SECONDS}s)
+          </Text>
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="contained"
-          onPress={handleSave}
-          style={styles.button}
-          disabled={
-            isNaN(parseInt(durationInput, 10)) ||
-            parseInt(durationInput, 10) < MINIMUM_GAME_DURATION_SECONDS
-          }
-        >
-          Save Settings
-        </Button>
-        <Button
-          mode="outlined"
-          onPress={() => router.push('/')}
-          style={styles.button}
-        >
-          Cancel
-        </Button>
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            onPress={handleSave}
+            style={styles.button}
+            disabled={
+              isNaN(parseInt(durationInput, 10)) ||
+              parseInt(durationInput, 10) < MINIMUM_GAME_DURATION_SECONDS
+            }
+          >
+            Save Settings
+          </Button>
+          <Button
+            mode="outlined"
+            onPress={() => router.push('/')}
+            style={styles.button}
+          >
+            Cancel
+          </Button>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
