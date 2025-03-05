@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Surface, Button } from 'react-native-paper';
+import { Text, Surface, Button, IconButton } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { Audio, AVPlaybackStatus } from 'expo-av';
+import * as Haptics from 'expo-haptics';
 import { DeviceMotion } from 'expo-sensors';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
 import { 
@@ -12,7 +13,7 @@ import {
 } from '../src/constants/constants';
 
 // Constants for tilt detection
-const TILT_THRESHOLD = 65; // degrees
+const TILT_THRESHOLD = 50; // degrees
 const DEBOUNCE_TIME = 500; // milliseconds
 
 export default function GameScreen() {
@@ -40,7 +41,7 @@ export default function GameScreen() {
     const subscription = DeviceMotion.addListener(({ rotation }) => {
       // Convert radians to degrees and get the tilt angle
       // When phone is held on left edge, we use beta rotation (around X-axis)
-      const tiltDegrees = (rotation.gamma * 180) / Math.PI;
+      const tiltDegrees = ((rotation.gamma * 180) / Math.PI) + 90;
       setCurrentTilt(tiltDegrees);
 
       const now = Date.now();
@@ -98,16 +99,25 @@ export default function GameScreen() {
     }
   }, [timeLeft, isPlaying, score]);
 
-  // Handle correct/incorrect with sound
+  // Handle correct/incorrect with sound and haptics
   const handleCorrect = async () => {
-    await playSound(true);
+    const isCorrect = true;
+    await Promise.all([
+      playSound(isCorrect),
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+    ]);
     markCorrect();
   };
 
   const handleIncorrect = async () => {
-    await playSound(false);
+    const isCorrect = false;
+    await Promise.all([
+      playSound(isCorrect),
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+    ]);
     markIncorrect();
   };
+
 
   // Visual tilt indicator
   const getTiltIndicator = () => {
@@ -120,6 +130,16 @@ export default function GameScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Play' }} />
+      <IconButton
+        icon="home"
+        iconColor="#f4511e"
+        size={30}
+        style={styles.homeButton}
+        onPress={() => {
+          endGame();
+          router.navigate('/');
+        }}
+      />
       <Text variant="headlineMedium" style={styles.timer}>
         {timeLeft}s
       </Text>
@@ -151,6 +171,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
+  },
+  homeButton: {
+    position: 'absolute',
+    left: 10,
+    top: 10,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   timer: {
     marginTop: 20,
