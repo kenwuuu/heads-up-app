@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text, Surface, Button } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
+import { BUTTON_COLORS, DEFAULT_READY_TEXT } from '../src/constants/constants';
 
 export default function GameScreen() {
   const { 
@@ -37,14 +38,14 @@ export default function GameScreen() {
       <Button
         mode="contained"
         onPress={markCorrect}
-        style={[styles.controlButton, { backgroundColor: '#4CAF50' }]}
+        style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.CORRECT }]}
       >
         Correct
       </Button>
       <Button
         mode="contained"
         onPress={markIncorrect}
-        style={[styles.controlButton, { backgroundColor: '#f44336' }]}
+        style={[styles.controlButton, { backgroundColor: BUTTON_COLORS.INCORRECT }]}
       >
         Pass
       </Button>
@@ -59,7 +60,7 @@ export default function GameScreen() {
       </Text>
       <Surface style={styles.wordCard} elevation={4}>
         <Text variant="headlineLarge" style={styles.word}>
-          {currentWord?.text || 'Ready?'}
+          {currentWord?.text || DEFAULT_READY_TEXT}
         </Text>
       </Surface>
       <Text variant="titleLarge" style={styles.score}>

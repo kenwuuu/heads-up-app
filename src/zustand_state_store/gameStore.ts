@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Deck, Word } from '../mock/decks';
-import { DEFAULT_GAME_DURATION_SECONDS } from '../constants/game';
+import { DEFAULT_GAME_DURATION_SECONDS } from '../constants/constants';
 
 interface GameState {
   // Selected deck

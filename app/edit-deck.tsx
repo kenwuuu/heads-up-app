@@ -36,7 +36,7 @@ export default function EditDeckScreen() {
       addDeck(deck);
     }
 
-    router.back();
+    router.push('/');
   };
 
   const addWord = () => {
@@ -109,7 +109,7 @@ export default function EditDeckScreen() {
         </Button>
         <Button
           mode="outlined"
-          onPress={() => router.back()}
+          onPress={() => router.push('/')}
           style={styles.button}
         >
           Cancel

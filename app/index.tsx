@@ -4,11 +4,15 @@ import { Stack, router } from 'expo-router';
 import { useDeckStore } from '../src/zustand_state_store/deckStore';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
 import { Deck } from '../src/mock/decks';
+import { 
+  GRID_COLUMN_COUNT, 
+  GRID_SPACING, 
+  GRID_SPACING_MULTIPLIER,
+  SELECTED_CARD_STYLES 
+} from '../src/constants/constants';
 
-const COLUMN_COUNT = 2;
-const SPACING = 8;
 const screenWidth = Dimensions.get('window').width;
-const cardWidth = (screenWidth - (COLUMN_COUNT + 1) * SPACING * 2) / COLUMN_COUNT;
+const cardWidth = (screenWidth - (GRID_COLUMN_COUNT + 1) * GRID_SPACING * 2) / GRID_COLUMN_COUNT;
 
 export default function HomeScreen() {
   const decks = useDeckStore((state) => state.decks);
@@ -66,7 +70,7 @@ export default function HomeScreen() {
         data={decks}
         renderItem={renderDeckCard}
         keyExtractor={(item) => item.id}
-        numColumns={COLUMN_COUNT}
+        numColumns={GRID_COLUMN_COUNT}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.grid}
       />
@@ -95,27 +99,27 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: SPACING * 2,
+    padding: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   title: {
     textAlign: 'center',
-    marginBottom: SPACING * 4,
+    marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
   },
   grid: {
-    paddingBottom: SPACING * 2,
+    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   row: {
     justifyContent: 'space-between',
-    marginBottom: SPACING * 2,
+    marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   card: {
     width: cardWidth,
     marginHorizontal: 0,
   },
   selectedCard: {
-    backgroundColor: '#e8f0fe',
-    borderColor: '#1a73e8',
-    borderWidth: 2,
+    backgroundColor: SELECTED_CARD_STYLES.BACKGROUND_COLOR,
+    borderColor: SELECTED_CARD_STYLES.BORDER_COLOR,
+    borderWidth: SELECTED_CARD_STYLES.BORDER_WIDTH,
   },
   cardTitle: {
     marginBottom: 4,
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 'auto',
-    gap: SPACING,
+    gap: GRID_SPACING,
   },
   button: {
     width: '100%',

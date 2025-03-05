@@ -3,6 +3,7 @@ import { Button, Text, TextInput, Portal, Modal } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
 import { useState } from 'react';
+import { HINT_TEXT_COLOR, MINIMUM_GAME_DURATION_SECONDS } from '../src/constants/constants';
 
 export default function SettingsScreen() {
   const gameDuration = useGameStore((state) => state.gameDuration);
@@ -11,10 +12,10 @@ export default function SettingsScreen() {
 
   const handleSave = () => {
     const duration = parseInt(durationInput, 10);
-    if (!isNaN(duration) && duration > 0) {
+    if (!isNaN(duration) && duration >= MINIMUM_GAME_DURATION_SECONDS) {
       setGameDuration(duration);
     }
-    router.back();
+    router.push('/');
   };
 
   return (
@@ -33,7 +34,7 @@ export default function SettingsScreen() {
           style={styles.input}
         />
         <Text variant="bodySmall" style={styles.hint}>
-          Enter the number of seconds for each round (minimum: 1s)
+          Enter the number of seconds for each round (minimum: {MINIMUM_GAME_DURATION_SECONDS}s)
         </Text>
       </View>
 
@@ -44,14 +45,14 @@ export default function SettingsScreen() {
           style={styles.button}
           disabled={
             isNaN(parseInt(durationInput, 10)) ||
-            parseInt(durationInput, 10) <= 1
+            parseInt(durationInput, 10) < MINIMUM_GAME_DURATION_SECONDS
           }
         >
           Save Settings
         </Button>
         <Button
           mode="outlined"
-          onPress={() => router.back()}
+          onPress={() => router.push('/')}
           style={styles.button}
         >
           Cancel
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   hint: {
-    color: '#666',
+    color: HINT_TEXT_COLOR,
   },
   buttonContainer: {
     marginTop: 'auto',
