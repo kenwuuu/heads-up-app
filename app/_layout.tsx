@@ -19,7 +19,7 @@ export default function RootLayout() {
             <IconButton
               icon="home"
               iconColor="#fff"
-              onPress={() => router.push('/')}
+              onPress={() => router.navigate('/')}
             />
           ),
         }}
