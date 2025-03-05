@@ -25,7 +25,7 @@ export default function GameScreen() {
 
   const [subscription, setSubscription] = useState<any>(null);
   const [lastAction, setLastAction] = useState<number | null>(null);
-  const TILT_THRESHOLD = 25; // Degrees of tilt required to trigger action
+  const TILT_THRESHOLD = 45; // Degrees of tilt required to trigger action
   const COOLDOWN_TIME = 1000; // Milliseconds to wait before allowing another action
 
   // Initialize sensors and audio
@@ -41,18 +41,18 @@ export default function GameScreen() {
       if (!isPlaying || !rotation) return;
       
       const now = Date.now();
-      const beta = (rotation.beta * 180) / Math.PI; // Convert to degrees
+      const gamma = ((rotation.gamma * 180) / Math.PI) + 90; // Convert to degrees and adjust for vertical position
       
       // Only allow actions if cooldown has passed
       if (lastAction && now - lastAction < COOLDOWN_TIME) return;
 
-      // Tilting up (negative beta)
-      if (beta < -TILT_THRESHOLD) {
+      // Tilting right from vertical (positive gamma)
+      if (gamma > TILT_THRESHOLD) {
         handleCorrect();
         setLastAction(now);
       }
-      // Tilting down (positive beta)
-      else if (beta > TILT_THRESHOLD) {
+      // Tilting left from vertical (negative gamma)
+      else if (gamma < -TILT_THRESHOLD) {
         handleIncorrect();
         setLastAction(now);
       }
