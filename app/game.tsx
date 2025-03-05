@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Surface, Button } from 'react-native-paper';
+import { Text, Surface, Button, IconButton } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
@@ -100,6 +100,16 @@ export default function GameScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Play' }} />
+      <IconButton
+        icon="home"
+        iconColor="#f4511e"
+        size={30}
+        style={styles.homeButton}
+        onPress={() => {
+          endGame();
+          router.navigate('/');
+        }}
+      />
       <Text variant="headlineMedium" style={styles.timer}>
         {timeLeft}s
       </Text>
@@ -122,6 +132,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
+  },
+  homeButton: {
+    position: 'absolute',
+    left: 10,
+    top: 10,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   timer: {
     marginTop: 20,
