@@ -33,7 +33,6 @@ export default function GameScreen() {
     DeviceMotion.setUpdateInterval(100); // Update every 100ms
     
     Audio.setAudioModeAsync({
-      playsInSilentModeIOS: AUDIO_CONFIG.PLAYS_IN_SILENT_MODE_IOS,
       staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
     });
 
