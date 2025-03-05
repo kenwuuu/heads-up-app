@@ -22,6 +22,7 @@ export default function RootLayout() {
               onPress={() => router.navigate('/')}
             />
           ),
+          gestureEnabled: false,
         }}
       />
     </PaperProvider>
