@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text, Surface, Button, IconButton } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { Audio, AVPlaybackStatus } from 'expo-av';
+import * as Haptics from 'expo-haptics';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
 import { 
   BUTTON_COLORS, 
@@ -66,14 +67,22 @@ export default function GameScreen() {
     }
   }, [timeLeft, isPlaying, score]);
 
-  // Handle correct/incorrect with sound
+  // Handle correct/incorrect with sound and haptics
   const handleCorrect = async () => {
-    await playSound(true);
+    const isCorrect = true;
+    await Promise.all([
+      playSound(isCorrect),
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+    ]);
     markCorrect();
   };
 
   const handleIncorrect = async () => {
-    await playSound(false);
+    const isCorrect = false;
+    await Promise.all([
+      playSound(isCorrect),
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+    ]);
     markIncorrect();
   };
 
