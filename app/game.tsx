@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Surface, Button, IconButton } from 'react-native-paper';
 import { Stack, router } from 'expo-router';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import * as Haptics from 'expo-haptics';
+import { DeviceMotion } from 'expo-sensors';
 import { useGameStore } from '../src/zustand_state_store/gameStore';
 import { 
   BUTTON_COLORS, 
@@ -22,34 +23,47 @@ export default function GameScreen() {
     endGame
   } = useGameStore();
 
-  // Initialize audio
+  const [subscription, setSubscription] = useState<any>(null);
+  const [lastAction, setLastAction] = useState<number | null>(null);
+  const TILT_THRESHOLD = 25; // Degrees of tilt required to trigger action
+  const COOLDOWN_TIME = 1000; // Milliseconds to wait before allowing another action
+
+  // Initialize sensors and audio
   useEffect(() => {
+    DeviceMotion.setUpdateInterval(100); // Update every 100ms
+    
     Audio.setAudioModeAsync({
       playsInSilentModeIOS: AUDIO_CONFIG.PLAYS_IN_SILENT_MODE_IOS,
       staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
     });
-  }, []);
 
-  // Sound feedback function
-  const playSound = async (isCorrect: boolean) => {
-    try {
-      const soundObject = new Audio.Sound();
-      const soundFile = isCorrect
-        ? require('../assets/sounds/correct.mp3')
-        : require('../assets/sounds/incorrect.mp3');
-        
-      await soundObject.loadAsync(soundFile);
-      await soundObject.playAsync();
-      // Unload sound after playing
-      soundObject.setOnPlaybackStatusUpdate(async (status: AVPlaybackStatus) => {
-        if ('didJustFinish' in status && status.didJustFinish) {
-          await soundObject.unloadAsync();
-        }
-      });
-    } catch (error) {
-      console.log('Error playing sound:', error);
-    }
-  };
+    const subscription = DeviceMotion.addListener(({ rotation }) => {
+      if (!isPlaying || !rotation) return;
+      
+      const now = Date.now();
+      const beta = (rotation.beta * 180) / Math.PI; // Convert to degrees
+      
+      // Only allow actions if cooldown has passed
+      if (lastAction && now - lastAction < COOLDOWN_TIME) return;
+
+      // Tilting up (negative beta)
+      if (beta < -TILT_THRESHOLD) {
+        handleCorrect();
+        setLastAction(now);
+      }
+      // Tilting down (positive beta)
+      else if (beta > TILT_THRESHOLD) {
+        handleIncorrect();
+        setLastAction(now);
+      }
+    });
+
+    setSubscription(subscription);
+
+    return () => {
+      subscription.remove();
+    };
+  }, [isPlaying, lastAction]);
 
   // Timer effect
   useEffect(() => {
@@ -105,6 +119,27 @@ export default function GameScreen() {
       </Button>
     </View>
   );
+  
+  // Sound feedback function
+  const playSound = async (isCorrect: boolean) => {
+    try {
+      const soundObject = new Audio.Sound();
+      const soundFile = isCorrect
+        ? require('../assets/sounds/correct.mp3')
+        : require('../assets/sounds/incorrect.mp3');
+        
+      await soundObject.loadAsync(soundFile);
+      await soundObject.playAsync();
+      // Unload sound after playing
+      soundObject.setOnPlaybackStatusUpdate(async (status: AVPlaybackStatus) => {
+        if ('didJustFinish' in status && status.didJustFinish) {
+          await soundObject.unloadAsync();
+        }
+      });
+    } catch (error) {
+      console.log('Error playing sound:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
