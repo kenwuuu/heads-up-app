@@ -32,6 +32,10 @@ export default function GameScreen() {
 
   // Initialize audio and motion sensors
   useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+
     Audio.setAudioModeAsync({
       staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
     });
@@ -60,7 +64,7 @@ export default function GameScreen() {
     return () => {
       subscription.remove();
     };
-  }, [lastActionTime]);
+  }, [lastActionTime, isPlaying]);
 
   // Sound feedback function
   const playSound = async (isCorrect: boolean) => {
