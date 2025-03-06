@@ -1,3 +1,26 @@
+# Building
+
+## Steps
+
+1. **Install EAS CLI**
+   ```bash
+   npm install -g eas-cli
+   ```
+
+2. **Configure your project**
+   ```bash
+   eas build:configure
+   ```
+
+3. **Build a custom development client**
+   ```bash
+   eas build -p ios --profile development
+   ```
+
+4. **Install it on your iPhone**  
+   Use Apple's free developer account and Xcode to install the custom build.
+
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
