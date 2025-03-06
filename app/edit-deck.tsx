@@ -116,7 +116,13 @@ export default function EditDeckScreen() {
           {words.map((word) => (
             <View key={word.id} style={styles.wordItem}>
               <Text variant="bodyLarge">{word.text}</Text>
-              <IconButton icon="delete" onPress={() => removeWord(word.id)}/>
+              <IconButton
+                icon="delete"
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  removeWord(word.id);
+                }}
+              />
             </View>
           ))}
         </ScrollView>
@@ -124,7 +130,9 @@ export default function EditDeckScreen() {
         <View style={styles.buttonContainer}>
           <Button
             mode="contained"
-            onPress={handleSave}
+            onPress={() => {
+              handleSave();
+            }}
             style={styles.button}
             disabled={!title.trim() || words.length === 0}
           >
@@ -132,7 +140,9 @@ export default function EditDeckScreen() {
           </Button>
           <Button
             mode="outlined"
-            onPress={() => router.push('/')}
+            onPress={() => {
+              router.push('/');
+            }}
             style={styles.button}
           >
             Cancel
