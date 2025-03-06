@@ -1,6 +1,6 @@
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
-import {Button, Card, IconButton, Text} from 'react-native-paper';
-import {router, Stack} from 'expo-router';
+import {Card, FAB, Text} from 'react-native-paper';
+import {router} from 'expo-router';
 import {useDeckStore} from '@/src/zustand_state_store/deckStore';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {Deck} from '@/src/mock/decks';
@@ -51,19 +51,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: 'Heads Up!',
-          headerRight: () => (
-            <IconButton
-              icon="cog"
-              onPress={() => router.push('/settings')}
-            />
-          ),
-        }}
-      />
-
-      {/* Card List - Scroll View */}
       <FlatList
         data={decks}
         renderItem={renderDeckCard}
@@ -78,24 +65,13 @@ export default function HomeScreen() {
           </Text>
         }
       />
-
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="contained"
-          onPress={handleStartGame}
-          style={styles.button}
-          disabled={!selectedDeck}
-        >
-          Start Game
-        </Button>
-        <Button
-          mode="outlined"
-          onPress={() => router.push('/decks')}
-          style={styles.button}
-        >
-          Manage Decks
-        </Button>
-      </View>
+      <FAB
+        icon="play"
+        style={styles.fab}
+        onPress={handleStartGame}
+        disabled={!selectedDeck}
+        label="Start Game"
+      />
     </View>
   );
 }
@@ -113,7 +89,7 @@ const styles = StyleSheet.create({
     marginTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   grid: {
-    paddingBottom: 0,
+    paddingBottom: 80, // Add padding for FAB
     paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   row: {
@@ -135,17 +111,10 @@ const styles = StyleSheet.create({
   cardDescription: {
     marginBottom: 4,
   },
-  buttonContainer: {
-    marginTop: 'auto',
-    paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
-    paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
-    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM, // Adds padding from bottom
-    gap: GRID_SPACING,
-    backgroundColor: 'transparent',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  button: {
-    width: '100%',
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    alignSelf: 'center',
+    bottom: 0,
   },
 });
