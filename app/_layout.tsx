@@ -28,14 +28,7 @@ export default function RootLayout() {
     <PaperProvider>
       <Tabs
         screenOptions={({ route }) => ({
-          headerStyle: {
-            backgroundColor: '#f4511e',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          headerShown: route.name !== 'game', // Hide header on game screen
+          headerShown: false, // Hide header on game screen
           gestureEnabled: false,
           animation: 'none',
           tabBarStyle: route.name === 'game' ? {display: 'none'} : undefined, // Hide tab bar on game screen
@@ -44,7 +37,7 @@ export default function RootLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Home',
+            title: 'Heads Up!',
             tabBarIcon: ({color, size}) => (
               <IconButton icon="home" size={size} iconColor={color}/>
             ),

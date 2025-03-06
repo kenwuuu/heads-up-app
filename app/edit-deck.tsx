@@ -1,9 +1,10 @@
-import { useState, useRef } from 'react';
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Button, Text, TextInput, IconButton } from 'react-native-paper';
-import { Stack, router, useLocalSearchParams } from 'expo-router';
-import { useDeckStore } from '../src/zustand_state_store/deckStore';
-import { Deck, Word } from '../src/mock/decks';
+import {useRef, useState} from 'react';
+import {KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View} from 'react-native';
+import {Button, IconButton, Text, TextInput} from 'react-native-paper';
+import {router, Stack, useLocalSearchParams} from 'expo-router';
+import {useDeckStore} from '../src/zustand_state_store/deckStore';
+import {Deck, Word} from '../src/mock/decks';
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export default function EditDeckScreen() {
   const { deckId } = useLocalSearchParams<{ deckId: string }>();
@@ -55,82 +56,89 @@ export default function EditDeckScreen() {
   };
 
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 24}
-    >
-      <Stack.Screen
-        options={{
-          title: existingDeck ? 'Edit Deck' : 'New Deck',
-        }}
-      />
-      <ScrollView 
-        ref={scrollViewRef}
-        style={styles.scrollView}
-        keyboardShouldPersistTaps="handled"
-        onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+    <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 24}
       >
-        <TextInput
-          label="Deck Title"
-          value={title}
-          onChangeText={setTitle}
-          style={styles.input}
+        <Stack.Screen
+          options={{
+            title: existingDeck ? 'Edit Deck' : 'New Deck',
+          }}
         />
-        <TextInput
-          label="Description"
-          value={description}
-          onChangeText={setDescription}
-          style={styles.input}
-        />
-
-        <Text variant="titleMedium" style={styles.sectionTitle}>
-          Words
-        </Text>
-
-        {words.map((word) => (
-          <View key={word.id} style={styles.wordItem}>
-            <Text variant="bodyLarge">{word.text}</Text>
-            <IconButton icon="delete" onPress={() => removeWord(word.id)} />
-          </View>
-        ))}
-
-        <View style={styles.addWordContainer}>
+        <ScrollView
+          ref={scrollViewRef}
+          style={styles.scrollView}
+          keyboardShouldPersistTaps="handled"
+          onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({animated: true})}
+        >
           <TextInput
-            label="New Word"
-            value={newWord}
-            onChangeText={setNewWord}
-            style={styles.wordInput}
+            label="Deck Title"
+            value={title}
+            onChangeText={setTitle}
+            style={styles.input}
           />
-          <Button onPress={addWord} mode="contained">
-            Add
+          <TextInput
+            label="Description"
+            value={description}
+            onChangeText={setDescription}
+            style={styles.input}
+          />
+
+          <Text variant="titleMedium" style={styles.sectionTitle}>
+            Words
+          </Text>
+
+          {words.map((word) => (
+            <View key={word.id} style={styles.wordItem}>
+              <Text variant="bodyLarge">{word.text}</Text>
+              <IconButton icon="delete" onPress={() => removeWord(word.id)}/>
+            </View>
+          ))}
+
+          <View style={styles.addWordContainer}>
+            <TextInput
+              label="New Word"
+              value={newWord}
+              onChangeText={setNewWord}
+              style={styles.wordInput}
+            />
+            <Button onPress={addWord} mode="contained">
+              Add
+            </Button>
+          </View>
+        </ScrollView>
+
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            onPress={handleSave}
+            style={styles.button}
+            disabled={!title.trim() || words.length === 0}
+          >
+            Save Deck
+          </Button>
+          <Button
+            mode="outlined"
+            onPress={() => router.push('/')}
+            style={styles.button}
+          >
+            Cancel
           </Button>
         </View>
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="contained"
-          onPress={handleSave}
-          style={styles.button}
-          disabled={!title.trim() || words.length === 0}
-        >
-          Save Deck
-        </Button>
-        <Button
-          mode="outlined"
-          onPress={() => router.push('/')}
-          style={styles.button}
-        >
-          Cancel
-        </Button>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+  },
+  safeAreaContainer: {
     flex: 1,
   },
   scrollView: {

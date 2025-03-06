@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-import { Stack, router, useLocalSearchParams } from 'expo-router';
-import { useGameStore } from '../src/zustand_state_store/gameStore';
+import {StyleSheet, View} from 'react-native';
+import {Button, Text} from 'react-native-paper';
+import {router, Stack, useLocalSearchParams} from 'expo-router';
+import {useGameStore} from '../src/zustand_state_store/gameStore';
 
 export default function ResultsScreen() {
   const { score } = useLocalSearchParams<{ score: string }>();
@@ -48,6 +48,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+  },
+  safeAreaContainer: {
+    flex: 1,
   },
   title: {
     marginBottom: 20,

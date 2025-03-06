@@ -4,6 +4,7 @@ import {router} from 'expo-router';
 import {useDeckStore} from '@/src/zustand_state_store/deckStore';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {Deck} from '@/src/mock/decks';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   GRID_COLUMN_COUNT,
   GRID_SPACING,
@@ -50,34 +51,41 @@ export default function HomeScreen() {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={decks}
-        renderItem={renderDeckCard}
-        keyExtractor={(item) => item.id}
-        numColumns={GRID_COLUMN_COUNT}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.grid}
-        style={styles.flatList}
-        ListHeaderComponent={
-          <Text variant="headlineLarge" style={styles.title}>
-            Heads Up!
-          </Text>
-        }
-      />
-      <FAB
-        icon="play"
-        style={styles.fab}
-        onPress={handleStartGame}
-        disabled={!selectedDeck}
-        label="Start Game"
-      />
-    </View>
+    <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
+      <View style={styles.container}>
+        <FlatList
+          data={decks}
+          renderItem={renderDeckCard}
+          keyExtractor={(item) => item.id}
+          numColumns={GRID_COLUMN_COUNT}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.grid}
+          style={styles.flatList}
+          ListHeaderComponent={
+            <Text variant="headlineLarge" style={styles.title}>
+              Heads Up!
+            </Text>
+          }
+        />
+        <FAB
+          icon="play"
+          style={styles.fab}
+          onPress={handleStartGame}
+          disabled={!selectedDeck}
+          label="Start Game"
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+  },
+  safeAreaContainer: {
     flex: 1,
   },
   flatList: {
