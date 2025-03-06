@@ -142,7 +142,7 @@ export default function EditDeckScreen() {
           <Button
             mode="outlined"
             onPress={() => {
-              router.push('/');
+              router.push('/decks');
             }}
             style={styles.button}
           >
