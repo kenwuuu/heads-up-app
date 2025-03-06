@@ -1,15 +1,15 @@
-import { StyleSheet, View, FlatList, Dimensions } from 'react-native';
-import { Button, Text, Card, Surface, IconButton } from 'react-native-paper';
-import { Stack, router } from 'expo-router';
-import { useDeckStore } from '../src/zustand_state_store/deckStore';
-import { useGameStore } from '../src/zustand_state_store/gameStore';
-import { Deck } from '../src/mock/decks';
-import { 
-  GRID_COLUMN_COUNT, 
-  GRID_SPACING, 
+import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {Button, Card, IconButton, Text} from 'react-native-paper';
+import {router, Stack} from 'expo-router';
+import {useDeckStore} from '@/src/zustand_state_store/deckStore';
+import {useGameStore} from '@/src/zustand_state_store/gameStore';
+import {Deck} from '@/src/mock/decks';
+import {
+  GRID_COLUMN_COUNT,
+  GRID_SPACING,
   GRID_SPACING_MULTIPLIER,
-  SELECTED_CARD_STYLES 
-} from '../src/constants/constants';
+  SELECTED_CARD_STYLES
+} from '@/src/constants/constants';
 
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = (screenWidth - (GRID_COLUMN_COUNT + 1) * GRID_SPACING * 2) / GRID_COLUMN_COUNT;
