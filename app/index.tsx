@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 'auto',
+    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM, // Adds padding from bottom
     gap: GRID_SPACING,
   },
   button: {
