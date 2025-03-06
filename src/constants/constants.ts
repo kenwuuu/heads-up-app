@@ -1,5 +1,5 @@
 // Game UI constants
-export const DEFAULT_GAME_DURATION_SECONDS = 55;
+export const DEFAULT_GAME_DURATION_SECONDS = 30;
 export const MINIMUM_GAME_DURATION_SECONDS = 1;
 export const DEFAULT_READY_TEXT = 'Ready?';
 
