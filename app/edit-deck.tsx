@@ -59,9 +59,9 @@ export default function EditDeckScreen() {
   return (
     <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 24}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}  // provide different offsets between iOS and Android
       >
         <Stack.Screen
           options={{
@@ -71,6 +71,7 @@ export default function EditDeckScreen() {
         <ScrollView
           ref={scrollViewRef}
           style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
           keyboardShouldPersistTaps="handled"
         >
           <Text variant="titleMedium" style={styles.sectionTitle}>
@@ -158,12 +159,15 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopWidth: 1,
     borderTopColor: '#ccc',
+    display: 'flex',
   },
   safeAreaContainer: {
     flex: 1,
   },
   scrollView: {
     flex: 1,
+  },
+  scrollViewContent: {
     padding: 16,
   },
   input: {
@@ -194,6 +198,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     padding: 16,
     gap: 8,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
   },
   button: {
     width: '100%',
