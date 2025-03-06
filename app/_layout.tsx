@@ -1,8 +1,29 @@
-import {Tabs} from 'expo-router';
+import {Tabs, useRootNavigationState} from 'expo-router';
 import {IconButton, PaperProvider} from 'react-native-paper';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import {useEffect} from 'react';
 
 export default function RootLayout() {
+  const routeState = useRootNavigationState();
+
+  useEffect(() => {
+    const changeOrientation = async () => {
+      if (routeState?.routes?.length) {
+        const currentRoute = routeState.routes[routeState.index]?.name;
+
+        if (currentRoute === 'game') {
+          // Lock orientation to landscape left for the game screen
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_RIGHT);
+        } else {
+          // Lock orientation back to portrait for other screens
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        }
+      }
+    };
+
+    changeOrientation();
+  }, [routeState]);
+
   return (
     <PaperProvider>
       <Tabs
@@ -14,20 +35,10 @@ export default function RootLayout() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          headerShown: route.name !== 'game',  // Hide header on game screen
+          headerShown: route.name !== 'game', // Hide header on game screen
           gestureEnabled: false,
           animation: 'none',
-          orientation: route.name === 'game' ? 'landscape' : 'portrait',  // lock orientation to landscape on game screen
-          tabBarStyle: route.name === 'game' ? {display: 'none'} : undefined,  // Hide tab bar on game screen
-          listeners: {
-            focus: async () => {
-              if (route.name === 'game') {
-                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
-              } else {
-                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-              }
-            },
-          },
+          tabBarStyle: route.name === 'game' ? {display: 'none'} : undefined, // Hide tab bar on game screen
         })}
       >
         <Tabs.Screen
@@ -57,7 +68,13 @@ export default function RootLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="game"
+          options={{
+            title: 'Game',
+          }}
+        />
       </Tabs>
     </PaperProvider>
   );
-} 
+}
