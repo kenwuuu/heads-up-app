@@ -7,8 +7,10 @@ export const DEFAULT_READY_TEXT = 'Ready?';
 export const GRID_COLUMN_COUNT = 2;
 export const GRID_SPACING = 8;
 export const GRID_SPACING_MULTIPLIER = {
+  TINY: 1,
   SMALL: 2,
   MEDIUM: 4,
+  LARGE: 6,
 };
 
 // UI Theme constants

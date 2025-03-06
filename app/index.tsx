@@ -73,6 +73,7 @@ export default function HomeScreen() {
         numColumns={GRID_COLUMN_COUNT}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.grid}
+        style={styles.flatList}
       />
 
       <View style={styles.buttonContainer}>
@@ -99,14 +100,17 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+  },
+  flatList: {
+    paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   title: {
     textAlign: 'center',
     marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
   },
   grid: {
-    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+    paddingBottom: 0,
+    paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   row: {
     justifyContent: 'space-between',
@@ -129,10 +133,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 'auto',
-    marginHorizontal: -GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL, // allows borderTop to stretch edge to edge. must be equal to paddingHorizontal to properly negate it
-    paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+    paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
     paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
-    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL, // Adds padding from bottom
+    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM, // Adds padding from bottom
     gap: GRID_SPACING,
     backgroundColor: 'transparent',
     borderTopWidth: 1,
