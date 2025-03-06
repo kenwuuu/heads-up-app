@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Surface, Button, IconButton } from 'react-native-paper';
-import { Stack, router } from 'expo-router';
+import { Text, Surface, IconButton } from 'react-native-paper';
+import {Stack, router, useFocusEffect} from 'expo-router';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import { DeviceMotion } from 'expo-sensors';
-import { useGameStore } from '../src/zustand_state_store/gameStore';
+import { useGameStore } from '@/src/zustand_state_store/gameStore';
 import { 
   BUTTON_COLORS, 
   DEFAULT_READY_TEXT, 
   AUDIO_CONFIG
-} from '../src/constants/constants';
+} from '@/src/constants/constants';
 
 // Constants for tilt detection
 const TILT_THRESHOLD = 50; // degrees
@@ -31,40 +31,44 @@ export default function GameScreen() {
   const [currentTilt, setCurrentTilt] = useState(0);
 
   // Initialize audio and motion sensors
-  useEffect(() => {
-    if (!isPlaying) {
-      return;
-    }
-
-    Audio.setAudioModeAsync({
-      staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
-    });
-
-    // Start listening to DeviceMotion updates
-    DeviceMotion.setUpdateInterval(100); // Update every 100ms
-    const subscription = DeviceMotion.addListener(({ rotation }) => {
-      // Convert radians to degrees and get the tilt angle
-      // When phone is held on left edge, we use beta rotation (around X-axis)
-      const tiltDegrees = ((rotation.gamma * 180) / Math.PI) + 90;
-      setCurrentTilt(tiltDegrees);
-
-      const now = Date.now();
-      if (now - lastActionTime < DEBOUNCE_TIME) return;
-
-      // Check for tilt thresholds
-      if (tiltDegrees >= TILT_THRESHOLD) {
-        handleCorrect();
-        setLastActionTime(now);
-      } else if (tiltDegrees <= -TILT_THRESHOLD) {
-        handleIncorrect();
-        setLastActionTime(now);
+  useFocusEffect(
+    useCallback(() => {
+      if (!isPlaying) {
+        return;
       }
-    });
 
-    return () => {
-      subscription.remove();
-    };
-  }, [lastActionTime, isPlaying]);
+      Audio.setAudioModeAsync({
+        staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
+      });
+
+      DeviceMotion.setUpdateInterval(100); // Update every 100ms
+      const subscription = DeviceMotion.addListener(({ rotation }) => {
+        // Convert radians to degrees and get the tilt angle
+        // When phone is held on left edge, we use beta rotation (around X-axis)
+        const tiltDegrees = ((rotation.gamma * 180) / Math.PI) + 90;
+        setCurrentTilt(tiltDegrees);
+
+        const now = Date.now();
+        if (now - lastActionTime < DEBOUNCE_TIME) return;
+
+        // Check for tilt thresholds
+        if (tiltDegrees >= TILT_THRESHOLD) {
+          console.log('Listeners count:', DeviceMotion.getListenerCount());
+          handleCorrect();
+          setLastActionTime(now);
+        } else if (tiltDegrees <= -TILT_THRESHOLD) {
+          handleIncorrect();
+          setLastActionTime(now);
+        }
+      });
+
+      return () => {
+        subscription.remove();
+        DeviceMotion.removeAllListeners();
+        console.log('remove listeners');
+      };
+    }, [lastActionTime, isPlaying])
+  );
 
   // Sound feedback function
   const playSound = async (isCorrect: boolean) => {
