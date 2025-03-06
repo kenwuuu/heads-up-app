@@ -51,8 +51,8 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen 
-        options={{ 
+      <Stack.Screen
+        options={{
           title: 'Heads Up!',
           headerRight: () => (
             <IconButton
@@ -60,7 +60,7 @@ export default function HomeScreen() {
               onPress={() => router.push('/settings')}
             />
           ),
-        }} 
+        }}
       />
       <Text variant="headlineLarge" style={styles.title}>
         Heads Up!
@@ -117,9 +117,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   selectedCard: {
-  backgroundColor: SELECTED_CARD_STYLES.BACKGROUND_COLOR,
-  borderColor: SELECTED_CARD_STYLES.BORDER_COLOR,
-  borderWidth: SELECTED_CARD_STYLES.BORDER_WIDTH,
+    backgroundColor: SELECTED_CARD_STYLES.BACKGROUND_COLOR,
+    borderColor: SELECTED_CARD_STYLES.BORDER_COLOR,
+    borderWidth: SELECTED_CARD_STYLES.BORDER_WIDTH,
   },
   cardTitle: {
     marginBottom: 4,
@@ -129,8 +129,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 'auto',
-    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM, // Adds padding from bottom
+    marginHorizontal: -GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL, // allows borderTop to stretch edge to edge. must be equal to paddingHorizontal to properly negate it
+    paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+    paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+    paddingBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL, // Adds padding from bottom
     gap: GRID_SPACING,
+    backgroundColor: 'transparent',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
   },
   button: {
     width: '100%',
