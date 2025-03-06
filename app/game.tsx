@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {IconButton, Surface, Text} from 'react-native-paper';
+import {Button, Surface, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
 import {Audio, AVPlaybackStatus} from 'expo-av';
 import * as Haptics from 'expo-haptics';
@@ -134,16 +134,6 @@ export default function GameScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Play' }} />
-      <IconButton
-        icon="home"
-        iconColor="#f4511e"
-        size={30}
-        style={styles.homeButton}
-        onPress={() => {
-          endGame();
-          router.navigate('/');
-        }}
-      />
       <Text variant="headlineMedium" style={styles.timer}>
         {timeLeft}s
       </Text>
@@ -165,6 +155,17 @@ export default function GameScreen() {
       >
         {getTiltIndicator()}
       </Text>
+      <Button
+        mode="contained"
+        icon="home"
+        onPress={() => {
+          endGame();
+          router.navigate('/');
+        }}
+        style={styles.homeButton}
+      >
+        Home
+      </Button>
     </View>
   );
 }
@@ -177,10 +178,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   homeButton: {
-    position: 'absolute',
-    left: 10,
-    top: 10,
-    backgroundColor: 'white',
+    alignSelf: 'center',
+    marginBottom: 20,
     borderRadius: 20,
     elevation: 4,
     shadowColor: '#000',
@@ -208,7 +207,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   tiltIndicator: {
-    marginBottom: 40,
     fontWeight: 'bold',
   },
   correctTilt: {
