@@ -1,20 +1,16 @@
 import {useCallback, useEffect, useState} from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text, Surface, IconButton } from 'react-native-paper';
-import {Stack, router, useFocusEffect} from 'expo-router';
-import { Audio, AVPlaybackStatus } from 'expo-av';
+import {StyleSheet, View} from 'react-native';
+import {IconButton, Surface, Text} from 'react-native-paper';
+import {router, Stack, useFocusEffect} from 'expo-router';
+import {Audio, AVPlaybackStatus} from 'expo-av';
 import * as Haptics from 'expo-haptics';
-import { DeviceMotion } from 'expo-sensors';
-import { useGameStore } from '@/src/zustand_state_store/gameStore';
-import { 
-  BUTTON_COLORS, 
-  DEFAULT_READY_TEXT, 
-  AUDIO_CONFIG
-} from '@/src/constants/constants';
+import {DeviceMotion} from 'expo-sensors';
+import {useGameStore} from '@/src/zustand_state_store/gameStore';
+import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT} from '@/src/constants/constants';
 
 // Constants for tilt detection
 const TILT_THRESHOLD = 50; // degrees
-const DEBOUNCE_TIME = 500; // milliseconds
+const DEBOUNCE_TIME = 1000; // milliseconds
 
 export default function GameScreen() {
   const { 
