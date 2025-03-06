@@ -62,10 +62,8 @@ export default function HomeScreen() {
           ),
         }}
       />
-      <Text variant="headlineLarge" style={styles.title}>
-        Heads Up!
-      </Text>
 
+      {/* Card List - Scroll View */}
       <FlatList
         data={decks}
         renderItem={renderDeckCard}
@@ -74,6 +72,11 @@ export default function HomeScreen() {
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.grid}
         style={styles.flatList}
+        ListHeaderComponent={
+          <Text variant="headlineLarge" style={styles.title}>
+            Heads Up!
+          </Text>
+        }
       />
 
       <View style={styles.buttonContainer}>
@@ -107,6 +110,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
+    marginTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
   grid: {
     paddingBottom: 0,
