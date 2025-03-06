@@ -5,6 +5,7 @@ import {router, Stack, useLocalSearchParams} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {Deck, Word} from '../src/mock/decks';
 import {SafeAreaView} from "react-native-safe-area-context";
+import * as Haptics from 'expo-haptics';
 
 export default function EditDeckScreen() {
   const { deckId } = useLocalSearchParams<{ deckId: string }>();
@@ -71,8 +72,11 @@ export default function EditDeckScreen() {
           ref={scrollViewRef}
           style={styles.scrollView}
           keyboardShouldPersistTaps="handled"
-          onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({animated: true})}
         >
+          <Text variant="titleMedium" style={styles.sectionTitle}>
+            Deck Info
+          </Text>
+
           <TextInput
             label="Deck Title"
             value={title}
@@ -87,6 +91,25 @@ export default function EditDeckScreen() {
           />
 
           <Text variant="titleMedium" style={styles.sectionTitle}>
+            Add a Word
+          </Text>
+
+          <View style={styles.addWordContainer}>
+            <TextInput
+              label="New Word"
+              value={newWord}
+              onChangeText={setNewWord}
+              style={styles.wordInput}
+            />
+            <Button onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              addWord();
+            }} mode="contained">
+              Add
+            </Button>
+          </View>
+
+          <Text variant="titleMedium" style={styles.sectionTitle}>
             Words
           </Text>
 
@@ -96,18 +119,6 @@ export default function EditDeckScreen() {
               <IconButton icon="delete" onPress={() => removeWord(word.id)}/>
             </View>
           ))}
-
-          <View style={styles.addWordContainer}>
-            <TextInput
-              label="New Word"
-              value={newWord}
-              onChangeText={setNewWord}
-              style={styles.wordInput}
-            />
-            <Button onPress={addWord} mode="contained">
-              Add
-            </Button>
-          </View>
         </ScrollView>
 
         <View style={styles.buttonContainer}>
