@@ -71,7 +71,19 @@ export default function RootLayout() {
         <Tabs.Screen
           name="game"
           options={{
-            title: 'Game',
+            href: null, // This prevents the tab from showing in the tab bar
+          }}
+        />
+        <Tabs.Screen
+          name="results"
+          options={{
+            href: null, // This prevents the tab from showing in the tab bar
+          }}
+        />
+        <Tabs.Screen
+          name="edit-deck"
+          options={{
+            href: null, // This prevents the tab from showing in the tab bar
           }}
         />
       </Tabs>
