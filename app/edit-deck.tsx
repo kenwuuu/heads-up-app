@@ -1,11 +1,12 @@
-import {useRef, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import {KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View} from 'react-native';
 import {Button, IconButton, Text, TextInput} from 'react-native-paper';
-import {router, Stack, useLocalSearchParams} from 'expo-router';
+import {router, useLocalSearchParams} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {Deck, Word} from '../src/mock/decks';
-import {SafeAreaView} from "react-native-safe-area-context";
+import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function EditDeckScreen() {
   const { deckId } = useLocalSearchParams<{ deckId: string }>();
@@ -14,11 +15,26 @@ export default function EditDeckScreen() {
   const updateDeck = useDeckStore((state) => state.updateDeck);
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const existingDeck = decks.find((d) => d.id === deckId);
-  const [title, setTitle] = useState(existingDeck?.title || '');
-  const [description, setDescription] = useState(existingDeck?.description || '');
-  const [words, setWords] = useState<Word[]>(existingDeck?.words || []);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [words, setWords] = useState<Word[]>([]);
   const [newWord, setNewWord] = useState('');
+
+  // Use useFocusEffect to reset state when the screen loses focus
+  useFocusEffect(
+    useCallback(() => {
+      const existingDeck = decks.find((d) => d.id === deckId);
+      if (existingDeck) {
+        setTitle(existingDeck.title);
+        setDescription(existingDeck.description);
+        setWords(existingDeck.words);
+      } else {
+        setTitle('');
+        setDescription('');
+        setWords([]);
+      }
+    }, [deckId, decks]) // Re-run when deckId or decks change
+  );
 
   const handleSave = () => {
     if (!title.trim()) {
@@ -27,13 +43,13 @@ export default function EditDeckScreen() {
     }
 
     const deck: Deck = {
-      id: existingDeck?.id || Date.now().toString(),
+      id: deckId || Date.now().toString(), // Use deckId if it exists, otherwise generate a new one
       title: title.trim(),
       description: description.trim(),
       words: words,
     };
 
-    if (existingDeck) {
+    if (deckId) {
       updateDeck(deck);
     } else {
       addDeck(deck);
@@ -44,10 +60,7 @@ export default function EditDeckScreen() {
 
   const addWord = () => {
     if (newWord.trim()) {
-      setWords([
-        ...words,
-        { id: Date.now().toString(), text: newWord.trim() },
-      ]);
+      setWords([...words, {id: Date.now().toString(), text: newWord.trim()}]);
       setNewWord('');
     }
   };
@@ -61,13 +74,8 @@ export default function EditDeckScreen() {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}  // provide different offsets between iOS and Android
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
-        <Stack.Screen
-          options={{
-            title: existingDeck ? 'Edit Deck' : 'New Deck',
-          }}
-        />
         <ScrollView
           ref={scrollViewRef}
           style={styles.scrollView}
@@ -102,10 +110,13 @@ export default function EditDeckScreen() {
               onChangeText={setNewWord}
               style={styles.wordInput}
             />
-            <Button onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              addWord();
-            }} mode="contained">
+            <Button
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                addWord();
+              }}
+              mode="contained"
+            >
               Add
             </Button>
           </View>
@@ -205,4 +216,4 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
   },
-}); 
+});
