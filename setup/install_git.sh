@@ -10,27 +10,14 @@ if command_exists git; then
   echo "Git is already installed."
 else
   echo "Git is not installed. Checking for Homebrew..."
-
-  # Check if Homebrew is installed
+  # Verify Homebrew installation
   if command_exists brew; then
-    echo "Homebrew is already installed. Installing Git using Homebrew..."
+    echo "Installing Git using Homebrew..."
     brew install git
   else
-    echo "Homebrew is not installed. Installing Homebrew..."
-
-    # Install Homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    # Verify Homebrew installation
-    if command_exists brew; then
-      echo "Homebrew installed successfully. Installing Git using Homebrew..."
-      brew install git
-    else
-      echo "Failed to install Homebrew. Please install it manually and try again."
-      exit 1
-    fi
+    echo "Homebrew not found. Please install it manually and try again."
+    exit 1
   fi
-
   # Verify Git installation
   if command_exists git; then
     echo "Git installed successfully."
