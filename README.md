@@ -1,6 +1,6 @@
 ## Setup
 
-### General - Mac
+### Mac
 
 1. Unzip `setup` into the folder you want to hold this project.
 2. Copy the folder. Open `Terminal` by pressing `command + space`, typing `Terminal` and pressing `Enter`.
@@ -24,7 +24,7 @@ chmod +x setup.sh && ./setup.sh
 cd heads-up-app && npm install && npx expo start
 ```
 
-### Run On Your Phone
+### Testing On Your Phone
 
 1. Install Expo Go from the app store.
 2. Run `npx expo start` in terminal in the project folder.
