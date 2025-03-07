@@ -1,6 +1,39 @@
-# Building
+## Setup
 
-## Steps
+### General - Mac
+
+1. Unzip `setup` into the folder you want to hold this project.
+2. Copy the folder. Open `Terminal` by pressing `command + space`, typing `Terminal` and pressing `Enter`.
+3. Open the folder by typing `cd "paste the folder"`.
+4. Paste this command into `Terminal`.
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+5. Make sure to copy and run the three lines that it tells you to after installation.
+6. Paste the next line into terminal and run. It runs setup, installs git, then clones repo.
+
+```bash
+chmod +x setup.sh && ./setup.sh
+```
+
+4. Paste and run. Opens the folder, installs dependencies, starts Expo.
+
+```bash
+cd heads-up-app && npm install && npx expo start
+```
+
+### Run On Your Phone
+
+1. Install Expo Go from the app store.
+2. Run `npx expo start` in terminal in the project folder.
+2. If the text menu says `Press s │ switch to Expo Go`, then press s to switch.
+3. Open your phone's camera and scan the QR code. It should prompt you to open Expo Go.
+
+## Building
+
+### Steps
 
 1. **Install EAS CLI**
    ```bash
@@ -19,55 +52,3 @@
 
 4. **Install it on your iPhone**  
    Use Apple's free developer account and Xcode to install the custom build.
-
-
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
