@@ -29,7 +29,6 @@ export default function GameScreen() {
   } = useGameStore();
 
   const [lastActionTime, setLastActionTime] = useState(0);
-  const [currentGammaTilt, setCurrentGammaTilt] = useState(0);
 
   // Initialize audio and motion sensors
   useFocusEffect(
@@ -47,7 +46,6 @@ export default function GameScreen() {
         // Convert radians to degrees and get the tilt angle
         const betaTiltDegrees = ((rotation.beta * 180) / Math.PI);
         const gammaTiltDegrees = ((rotation.gamma * 180) / Math.PI) + 90;
-        setCurrentGammaTilt(gammaTiltDegrees);
 
         // handle debounce
         const now = Date.now();
@@ -135,15 +133,6 @@ export default function GameScreen() {
     markIncorrect();
   };
 
-
-  // Visual tilt indicator
-  const getTiltIndicator = () => {
-    if (Math.abs(currentGammaTilt) < 10) return "Neutral";
-    if (currentGammaTilt >= GAMMA_TILT_THRESHOLD) return "✓ Correct!";
-    if (currentGammaTilt <= -GAMMA_TILT_THRESHOLD) return "✗ Pass!";
-    return currentGammaTilt > 0 ? "Tilting Up..." : "Tilting Down...";
-  };
-
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Play' }} />
@@ -157,16 +146,6 @@ export default function GameScreen() {
       </Surface>
       <Text variant="titleLarge" style={styles.score}>
         Score: {score}
-      </Text>
-      <Text 
-        variant="titleMedium" 
-        style={[
-          styles.tiltIndicator,
-          currentGammaTilt >= GAMMA_TILT_THRESHOLD && styles.correctTilt,
-          currentGammaTilt <= -GAMMA_TILT_THRESHOLD && styles.incorrectTilt
-        ]}
-      >
-        {getTiltIndicator()}
       </Text>
       <Button
         mode="contained"
