@@ -38,6 +38,7 @@ export default function GameScreen() {
       }
 
       Audio.setAudioModeAsync({
+        playsInSilentModeIOS: AUDIO_CONFIG.PLAYS_IN_SILENT_MODE_IOS,
         staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
       });
 
