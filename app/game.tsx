@@ -9,10 +9,15 @@ import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT} from '@/src/constants/constants';
 
 // Constants for tilt detection
-const TILT_THRESHOLD = 50; // degrees
+const BETA_TILT_THRESHOLD = 20; // degrees
+const GAMMA_TILT_THRESHOLD = 50; // degrees
 const DEBOUNCE_TIME = 1000; // milliseconds
 
 export default function GameScreen() {
+  /**
+   *   beta is X axis, if portrait phone were a graph
+   *   gamma is Y axis, if portrait phone were a graph
+   */
   const { 
     timeLeft,
     currentWord,
@@ -24,7 +29,7 @@ export default function GameScreen() {
   } = useGameStore();
 
   const [lastActionTime, setLastActionTime] = useState(0);
-  const [currentTilt, setCurrentTilt] = useState(0);
+  const [currentGammaTilt, setCurrentGammaTilt] = useState(0);
 
   // Initialize audio and motion sensors
   useFocusEffect(
@@ -40,19 +45,27 @@ export default function GameScreen() {
       DeviceMotion.setUpdateInterval(100); // Update every 100ms
       const subscription = DeviceMotion.addListener(({ rotation }) => {
         // Convert radians to degrees and get the tilt angle
-        // When phone is held on left edge, we use beta rotation (around X-axis)
-        const tiltDegrees = ((rotation.gamma * 180) / Math.PI) + 90;
-        setCurrentTilt(tiltDegrees);
+        const betaTiltDegrees = ((rotation.beta * 180) / Math.PI);
+        const gammaTiltDegrees = ((rotation.gamma * 180) / Math.PI) + 90;
+        setCurrentGammaTilt(gammaTiltDegrees);
 
+        // handle debounce
         const now = Date.now();
         if (now - lastActionTime < DEBOUNCE_TIME) return;
 
+        function isValidDownTilt() { // if statement helper function
+          return gammaTiltDegrees <= -GAMMA_TILT_THRESHOLD && -BETA_TILT_THRESHOLD <= betaTiltDegrees && betaTiltDegrees <= BETA_TILT_THRESHOLD;
+        }
+
+        function isValidUpTilt() { // if statement helper function
+          return gammaTiltDegrees >= GAMMA_TILT_THRESHOLD && -BETA_TILT_THRESHOLD <= betaTiltDegrees && betaTiltDegrees <= BETA_TILT_THRESHOLD;
+        }
+
         // Check for tilt thresholds
-        if (tiltDegrees >= TILT_THRESHOLD) {
-          console.log('Listeners count:', DeviceMotion.getListenerCount());
+        if (isValidUpTilt()) {
           handleCorrect();
           setLastActionTime(now);
-        } else if (tiltDegrees <= -TILT_THRESHOLD) {
+        } else if (isValidDownTilt()) {
           handleIncorrect();
           setLastActionTime(now);
         }
@@ -125,10 +138,10 @@ export default function GameScreen() {
 
   // Visual tilt indicator
   const getTiltIndicator = () => {
-    if (Math.abs(currentTilt) < 10) return "Neutral";
-    if (currentTilt >= TILT_THRESHOLD) return "✓ Correct!";
-    if (currentTilt <= -TILT_THRESHOLD) return "✗ Pass!";
-    return currentTilt > 0 ? "Tilting Up..." : "Tilting Down...";
+    if (Math.abs(currentGammaTilt) < 10) return "Neutral";
+    if (currentGammaTilt >= GAMMA_TILT_THRESHOLD) return "✓ Correct!";
+    if (currentGammaTilt <= -GAMMA_TILT_THRESHOLD) return "✗ Pass!";
+    return currentGammaTilt > 0 ? "Tilting Up..." : "Tilting Down...";
   };
 
   return (
@@ -149,8 +162,8 @@ export default function GameScreen() {
         variant="titleMedium" 
         style={[
           styles.tiltIndicator,
-          currentTilt >= TILT_THRESHOLD && styles.correctTilt,
-          currentTilt <= -TILT_THRESHOLD && styles.incorrectTilt
+          currentGammaTilt >= GAMMA_TILT_THRESHOLD && styles.correctTilt,
+          currentGammaTilt <= -GAMMA_TILT_THRESHOLD && styles.incorrectTilt
         ]}
       >
         {getTiltIndicator()}
