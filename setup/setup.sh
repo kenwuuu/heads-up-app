@@ -13,6 +13,7 @@ FILES=(
   "install_brew.sh"
   "install_git.sh"
   "clone_repo.sh"
+  "install_npm.sh"
 #  "npm_install.sh"
 )
 
