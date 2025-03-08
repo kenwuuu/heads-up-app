@@ -1,9 +1,9 @@
 import {Deck} from '../deck_interfaces';
 
-const deck: Deck = {
+const vanillaDeck: Deck = {
   id: 'vanilla',
   title: 'Vanilla',
-  description: 'A deck containing words related to Vanilla.',
+  description: 'vanilla codenames? idk',
   words: [
     {id: 'word1', text: 'AFRICA'},
     {id: 'word2', text: 'AGENT'},
@@ -405,4 +405,4 @@ const deck: Deck = {
   ],
 };
 
-export default deck;
+export default vanillaDeck;

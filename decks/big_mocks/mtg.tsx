@@ -1,9 +1,9 @@
 import {Deck} from '../deck_interfaces';
 
-const deck: Deck = {
+const mtgDeck: Deck = {
   id: 'mtg',
   title: 'Mtg',
-  description: 'A deck containing words related to Mtg.',
+  description: 'TTRPG words',
   words: [
     {id: 'word1', text: 'ACTION'},
     {id: 'word2', text: 'AETHER'},
@@ -362,4 +362,4 @@ const deck: Deck = {
   ],
 };
 
-export default deck;
+export default mtgDeck;

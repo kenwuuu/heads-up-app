@@ -1,9 +1,9 @@
 import {Deck} from '../deck_interfaces';
 
-const deck: Deck = {
+const codenamesDeck: Deck = {
   id: 'codenames',
   title: 'Codenames',
-  description: 'A deck containing words related to Codenames.',
+  description: 'Words from Codenames.',
   words: [
     {id: 'word1', text: 'AFRICA'},
     {id: 'word2', text: 'AGENT'},
@@ -1351,4 +1351,4 @@ const deck: Deck = {
   ],
 };
 
-export default deck;
+export default codenamesDeck;
