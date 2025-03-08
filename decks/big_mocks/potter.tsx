@@ -1,0 +1,40 @@
+import {Deck} from '../deck_interfaces';
+
+const deck: Deck = {
+  id: 'potter',
+  title: 'Potter',
+  description: 'A deck containing words related to Potter.',
+  words: [
+    {id: 'word1', text: 'PRISONER'},
+    {id: 'word2', text: 'MERMAID'},
+    {id: 'word3', text: 'STAIRCASE'},
+    {id: 'word4', text: 'SCAR'},
+    {id: 'word5', text: 'JINX'},
+    {id: 'word6', text: 'CURSE'},
+    {id: 'word7', text: 'FANG'},
+    {id: 'word8', text: 'CUP'},
+    {id: 'word9', text: 'HARP'},
+    {id: 'word10', text: 'ALWAYS'},
+    {id: 'word11', text: 'EVIL'},
+    {id: 'word12', text: 'STUDY'},
+    {id: 'word13', text: 'FIREPLACE'},
+    {id: 'word14', text: 'FEAST'},
+    {id: 'word15', text: 'DETENTION'},
+    {id: 'word16', text: 'MAZE'},
+    {id: 'word17', text: 'LAKE'},
+    {id: 'word18', text: 'LIBRARY'},
+    {id: 'word19', text: 'KEEPER'},
+    {id: 'word20', text: 'DUEL'},
+    {id: 'word21', text: 'MUGGLE'},
+    {id: 'word22', text: 'STAG'},
+    {id: 'word23', text: 'BROOM'},
+    {id: 'word24', text: 'DIARY'},
+    {id: 'word25', text: 'GALLEON'},
+    {id: 'word26', text: 'QUILL'},
+    {id: 'word27', text: 'DIADEM'},
+    {id: 'word28', text: 'CAULDRON'},
+    {id: 'word29', text: 'GRAVEYARD'},
+  ],
+};
+
+export default deck;
