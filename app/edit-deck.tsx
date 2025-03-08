@@ -3,7 +3,7 @@ import {KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View} from 'reac
 import {Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {router, useLocalSearchParams} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
-import {Deck, Word} from '../src/mock/decks';
+import {Deck, Word} from '../decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import {useFocusEffect} from '@react-navigation/native';

@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { Deck, mockDecks } from '../mock/decks';
+import {create} from 'zustand';
+import {Deck, mockDecks} from '../../decks/decks';
 
 interface DeckState {
   // Deck management

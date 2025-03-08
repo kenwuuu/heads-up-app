@@ -52,3 +52,9 @@ cd heads-up-app && npm install && npx expo start
 
 4. **Install it on your iPhone**  
    Use Apple's free developer account and Xcode to install the custom build.
+
+## Resources
+
+### Words
+
+Codenames: [this repo](https://github.com/jacksun007/codenames)

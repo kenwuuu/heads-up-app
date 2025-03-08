@@ -3,7 +3,7 @@ import {Card, FAB, Text} from 'react-native-paper';
 import {router} from 'expo-router';
 import {useDeckStore} from '@/src/zustand_state_store/deckStore';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
-import {Deck} from '@/src/mock/decks';
+import {Deck} from '@/decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   GRID_COLUMN_COUNT,
