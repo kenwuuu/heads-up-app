@@ -16,7 +16,7 @@ if [ -d "$APP_DIR" ]; then
 
   # Run npm install
   echo "Running npm install..."
-#  npm install
+  npm install
   
   # Check if npm install succeeded
   if [ $? -eq 0 ]; then
