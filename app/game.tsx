@@ -12,6 +12,7 @@ import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT} from '@/src/constants/c
 const BETA_TILT_THRESHOLD = 20; // degrees
 const GAMMA_TILT_THRESHOLD = 50; // degrees
 const DEBOUNCE_TIME = 1000; // milliseconds
+const VERTICAL_OFFSET_DEGREES = 90;
 
 export default function GameScreen() {
   /**
@@ -45,8 +46,9 @@ export default function GameScreen() {
       DeviceMotion.setUpdateInterval(100); // Update every 100ms
       const subscription = DeviceMotion.addListener(({ rotation }) => {
         // Convert radians to degrees and get the tilt angle
-        const betaTiltDegrees = ((rotation.beta * 180) / Math.PI);
-        const gammaTiltDegrees = ((rotation.gamma * 180) / Math.PI) + 90;
+        const degrees = 180;
+        const betaTiltDegrees = ((rotation.beta * degrees) / Math.PI);
+        const gammaTiltDegrees = ((rotation.gamma * degrees) / Math.PI) + VERTICAL_OFFSET_DEGREES;
 
         // handle debounce
         const now = Date.now();
