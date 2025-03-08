@@ -1,5 +1,10 @@
 import {create} from 'zustand';
-import {Deck, mockDecks} from '../../decks/decks';
+import {Deck, mockDecks} from '@/decks/decks';
+import codenamesDeck from '@/decks/big_mocks/codenames';
+import duetDeck from '@/decks/big_mocks/duet';
+import mtgDeck from '@/decks/big_mocks/mtg';
+import potterDeck from '@/decks/big_mocks/potter';
+import vanillaDeck from '@/decks/big_mocks/vanilla';
 
 interface DeckState {
   // Deck management
@@ -11,7 +16,7 @@ interface DeckState {
 
 export const useDeckStore = create<DeckState>((set, get) => ({
   // Initial state with mock decks
-  decks: mockDecks,
+  decks: [duetDeck, codenamesDeck, mtgDeck, potterDeck, vanillaDeck, ...mockDecks],
 
   // Deck management actions
   addDeck: (deck) => {
