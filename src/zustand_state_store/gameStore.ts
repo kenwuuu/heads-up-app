@@ -17,7 +17,7 @@ interface GameState {
   isPlaying: boolean;
   currentWord: Word | null;
   score: number;
-  timeLeft: number;
+  gameTimeLeft: number;
   roundWords: Word[];
   countdownTime: number;
   showCountdown: boolean;
@@ -38,7 +38,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   currentWord: null,
   score: 0,
   gameDuration: DEFAULT_GAME_DURATION_SECONDS,
-  timeLeft: DEFAULT_GAME_DURATION_SECONDS,
+  gameTimeLeft: DEFAULT_GAME_DURATION_SECONDS,
   roundWords: [],
   isMuted: false,
   countdownTime: COUNTDOWN_TIME,
@@ -61,7 +61,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       isPlaying: true,
       currentWord: shuffledWords[0],
       score: 0,
-      timeLeft: gameDuration,
+      gameTimeLeft: gameDuration,
       roundWords: shuffledWords,
       countdownTime: COUNTDOWN_TIME,
       showCountdown: true,
@@ -109,7 +109,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       isPlaying: false,
       currentWord: null,
       score: 0,
-      timeLeft: gameDuration,
+      gameTimeLeft: gameDuration,
       roundWords: [],
     });
   },

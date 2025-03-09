@@ -23,8 +23,8 @@ export default function GameScreen() {
    *   beta is X axis, if portrait phone were a graph
    *   gamma is Y axis, if portrait phone were a graph
    */
-  const { 
-    timeLeft,
+  const {
+    gameTimeLeft,
     currentWord,
     score,
     isPlaying,
@@ -106,25 +106,25 @@ export default function GameScreen() {
 
   // Timer effect
   useEffect(() => {
-    if (timeLeft > 0 && isPlaying && !showCountdown) {  // Only start timer after countdown
-      const timer = setInterval(async () => {
-        if (timeLeft <= 6 && timeLeft >= 0) {  // tick 5, 4, 3, 2, 1, 0
+    if (gameTimeLeft > 0 && isPlaying && !showCountdown) {  // Only start gameTimer after countdown
+      const gameTimer = setInterval(async () => {
+        if (gameTimeLeft <= 6 && gameTimeLeft >= 0) {  // tick 5, 4, 3, 2, 1, 0
           if (!MUTE) {
             tickSoundObject.playAsync();
           }
         }
 
-        useGameStore.setState((state) => ({timeLeft: state.timeLeft - 1}));
+        useGameStore.setState((state) => ({gameTimeLeft: state.gameTimeLeft - 1}));
       }, 1000);
-      return () => clearInterval(timer);
-    } else if (timeLeft === 0) {
+      return () => clearInterval(gameTimer);
+    } else if (gameTimeLeft === 0) {
       endGame();
       router.replace({
         pathname: '/results',
         params: { score }
       });
     }
-  }, [timeLeft, isPlaying, showCountdown, score]);
+  }, [gameTimeLeft, isPlaying, showCountdown, score]);
 
   // Countdown effect
   useEffect(() => {
@@ -165,8 +165,8 @@ export default function GameScreen() {
         </View>
       ) : (
         <>
-          <Text variant="headlineMedium" style={styles.timer}>
-            {timeLeft}s
+          <Text variant="headlineMedium" style={styles.gameTimer}>
+            {gameTimeLeft}s
           </Text>
           <Text variant="headlineLarge" style={styles.word}>
             {currentWord?.text || DEFAULT_READY_TEXT}
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  timer: {
+  gameTimer: {
     marginTop: 20,
   },
   wordCard: {
