@@ -1,12 +1,13 @@
 import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, Surface, Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
 import {Audio} from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT} from '@/src/constants/constants';
+
 
 // Constants for tilt detection
 const BETA_TILT_THRESHOLD = 10; // degrees
@@ -140,11 +141,9 @@ export default function GameScreen() {
       <Text variant="headlineMedium" style={styles.timer}>
         {timeLeft}s
       </Text>
-      <Surface style={styles.wordCard} elevation={4}>
-        <Text variant="headlineLarge" style={styles.word}>
-          {currentWord?.text || DEFAULT_READY_TEXT}
-        </Text>
-      </Surface>
+      <Text variant="headlineLarge" style={styles.word}>
+        {currentWord?.text || DEFAULT_READY_TEXT}
+      </Text>
       <Text variant="titleLarge" style={styles.score}>
         Score: {score}
       </Text>
@@ -194,7 +193,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   word: {
+    padding: 80,
     textAlign: 'center',
+    fontSize: 80,
   },
   score: {
     marginBottom: 20,
