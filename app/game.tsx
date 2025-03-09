@@ -6,14 +6,7 @@ import {Audio} from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
-import {
-  AUDIO_CONFIG,
-  BUTTON_COLORS,
-  CARD_STYLES,
-  DEFAULT_READY_TEXT,
-  SPACING,
-  TEXT_STYLES,
-} from '@/src/constants/constants';
+import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT,} from '@/src/constants/constants';
 
 
 // Constants for tilt detection
@@ -205,7 +198,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   countdown: {
-    ...TEXT_STYLES.COUNTDOWN,
+    padding: 80,
+    fontSize: 72,
+    fontWeight: '700' as const,
+    color: '#333',
   },
   homeButton: {
     alignSelf: 'center',
