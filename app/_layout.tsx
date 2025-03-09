@@ -2,6 +2,7 @@ import {Tabs, useRootNavigationState} from 'expo-router';
 import {IconButton, PaperProvider} from 'react-native-paper';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {useEffect} from 'react';
+import {HIDE_TAB_BAR, PURPLE, TAB_BAR, YELLOW} from "@/src/constants/stylingConstants";
 
 export default function RootLayout() {
   const routeState = useRootNavigationState();
@@ -28,10 +29,12 @@ export default function RootLayout() {
     <PaperProvider>
       <Tabs
         screenOptions={({ route }) => ({
-          headerShown: false, // Hide header on game screen
+          headerShown: false,
           gestureEnabled: false,
           animation: 'none',
-          tabBarStyle: route.name === 'game' ? {display: 'none'} : undefined, // Hide tab bar on game screen
+          tabBarStyle: route.name === 'game' ? HIDE_TAB_BAR as any : TAB_BAR as any, // todo fix the "as any" hack
+          tabBarActiveTintColor: YELLOW, // Set active tab icon/text color to white
+          tabBarInactiveTintColor: PURPLE, // Set inactive tab icon/text color to lightgray
         })}
       >
         <Tabs.Screen
@@ -64,19 +67,19 @@ export default function RootLayout() {
         <Tabs.Screen
           name="game"
           options={{
-            href: null, // This prevents the tab from showing in the tab bar
+            href: null,
           }}
         />
         <Tabs.Screen
           name="results"
           options={{
-            href: null, // This prevents the tab from showing in the tab bar
+            href: null,
           }}
         />
         <Tabs.Screen
           name="edit-deck"
           options={{
-            href: null, // This prevents the tab from showing in the tab bar
+            href: null,
           }}
         />
       </Tabs>
