@@ -2,7 +2,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Surface, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
-import {Audio, AVPlaybackStatus} from 'expo-av';
+import {Audio} from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
@@ -33,6 +33,17 @@ export default function GameScreen() {
   } = useGameStore();
 
   const [lastActionTime, setLastActionTime] = useState(0);
+
+  // load sounds. there has got to be a better way to do this lol
+  const tickSoundObject = new Audio.Sound();
+  const correctAnswerSoundObject = new Audio.Sound();
+  const incorrectAnswerSoundObject = new Audio.Sound();
+  const tickSoundFile = require('../assets/sounds/tick.wav');
+  const correctAnswerSoundFile = require('../assets/sounds/correct.mp3');
+  const incorrectAnswerSoundFile = require('../assets/sounds/incorrect.mp3');
+  tickSoundObject.loadAsync(tickSoundFile);
+  correctAnswerSoundObject.loadAsync(correctAnswerSoundFile);
+  incorrectAnswerSoundObject.loadAsync(incorrectAnswerSoundFile);
 
   // Initialize audio and motion sensors
   useFocusEffect(
@@ -67,10 +78,10 @@ export default function GameScreen() {
 
         // Check for tilt thresholds
         if (isValidUpTilt()) {
-          handleCorrect();
+          handleAnswer(true, correctAnswerSoundObject, incorrectAnswerSoundObject);
           setLastActionTime(now);
         } else if (isValidDownTilt()) {
-          handleIncorrect();
+          handleAnswer(false, correctAnswerSoundObject, incorrectAnswerSoundObject);
           setLastActionTime(now);
         }
       });
@@ -78,37 +89,19 @@ export default function GameScreen() {
       return () => {
         subscription.remove();
         DeviceMotion.removeAllListeners();
-        console.log('remove listeners');
       };
     }, [lastActionTime, isPlaying])
   );
 
-  // Sound feedback function
-  const playSound = async (isCorrect: boolean) => {
-    try {
-      const soundObject = new Audio.Sound();
-      const soundFile = isCorrect
-        ? require('../assets/sounds/correct.mp3')
-        : require('../assets/sounds/incorrect.mp3');
-        
-      await soundObject.loadAsync(soundFile);
-      await soundObject.playAsync();
-      // Unload sound after playing
-      soundObject.setOnPlaybackStatusUpdate(async (status: AVPlaybackStatus) => {
-        if ('didJustFinish' in status && status.didJustFinish) {
-          await soundObject.unloadAsync();
-        }
-      });
-    } catch (error) {
-      console.log('Error playing sound:', error);
-    }
-  };
-
   // Timer effect
   useEffect(() => {
     if (timeLeft > 0 && isPlaying) {
-      const timer = setInterval(() => {
-        useGameStore.setState((state) => ({ timeLeft: state.timeLeft - 1 }));
+      const timer = setInterval(async () => {
+        if (timeLeft <= 6 && timeLeft > 0) {  // tick 5, 4, 3, 2, 1, 0
+          await tickSoundObject.playAsync();
+        }
+
+        useGameStore.setState((state) => ({timeLeft: state.timeLeft - 1}));
       }, 1000);
       return () => clearInterval(timer);
     } else if (timeLeft === 0) {
@@ -121,22 +114,20 @@ export default function GameScreen() {
   }, [timeLeft, isPlaying, score]);
 
   // Handle correct/incorrect with sound and haptics
-  const handleCorrect = async () => {
-    const isCorrect = true;
-    await Promise.all([
-      playSound(isCorrect),
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-    ]);
-    markCorrect();
-  };
-
-  const handleIncorrect = async () => {
-    const isCorrect = false;
-    await Promise.all([
-      playSound(isCorrect),
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-    ]);
-    markIncorrect();
+  const handleAnswer = async (isCorrect: boolean, correctSound: Audio.Sound, incorrectSound: Audio.Sound) => {
+    if (isCorrect) {
+      await Promise.all([
+        correctSound.playAsync(),
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+      ]);
+      markCorrect();
+    } else {
+      await Promise.all([
+        incorrectSound.playAsync(),
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+      ]);
+      markIncorrect();
+    }
   };
 
   return (
