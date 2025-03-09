@@ -7,6 +7,7 @@ import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT,} from '@/src/constants/constants';
+import {PURPLE, styleSheet} from '@/src/constants/stylingConstants';
 
 
 // Constants for tilt detection
@@ -161,17 +162,17 @@ export default function GameScreen() {
       <Stack.Screen options={{ title: 'Play' }} />
       {showCountdown ? (
         <View style={styles.countdownContainer}>
-          <Text variant="displayLarge" style={styles.countdown}>{countdownTime}</Text>
+          <Text variant="displayLarge" style={[styles.countdown, styleSheet.GAME_TEXT]}>{countdownTime}</Text>
         </View>
       ) : (
         <>
-          <Text variant="headlineMedium" style={styles.gameTimer}>
+          <Text variant="headlineMedium" style={[styles.gameTimer, styleSheet.GAME_TEXT]}>
             {gameTimeLeft}s
           </Text>
-          <Text variant="headlineLarge" style={styles.word}>
+          <Text variant="headlineLarge" style={[styles.word, styleSheet.GAME_TEXT]}>
             {currentWord?.text || DEFAULT_READY_TEXT}
           </Text>
-          <Text variant="titleLarge" style={styles.score}>
+          <Text variant="titleLarge" style={[styles.score, styleSheet.GAME_TEXT]}>
             Score: {score}
           </Text>
           <Button
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
+    backgroundColor: PURPLE,
   },
   countdownContainer: {
     flex: 1,
@@ -233,9 +235,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   word: {
-    padding: 80,
+    paddingTop: 120,
     textAlign: 'center',
-    fontSize: 80,
+    fontSize: 140,
   },
   score: {
     marginBottom: 20,

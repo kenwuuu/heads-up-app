@@ -12,6 +12,7 @@ import {
   SELECTED_CARD_STYLES
 } from '@/src/constants/constants';
 import {handleStartGame} from "@/app/gameUtils";
+import {NAVY, PURPLE, styleSheet, YELLOW} from "@/src/constants/stylingConstants";
 
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = (screenWidth - (GRID_COLUMN_COUNT + 1) * GRID_SPACING * 2) / GRID_COLUMN_COUNT;
@@ -46,8 +47,8 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
-      <View style={styles.container}>
+    <SafeAreaView style={styleSheet.SAFE_AREA_CONTAINER} edges={['top']}>
+      <View style={styleSheet.BACKGROUND_CONTAINER}>
         <FlatList
           data={decks}
           renderItem={renderDeckCard}
@@ -77,14 +78,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
   flatList: {
     paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
   },
@@ -92,6 +85,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
     marginTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+    ...styleSheet.GAME_TEXT
   },
   grid: {
     paddingBottom: 80, // Add padding for FAB
@@ -104,17 +98,21 @@ const styles = StyleSheet.create({
   card: {
     width: cardWidth,
     marginHorizontal: 0,
+    backgroundColor: NAVY,
+    borderColor: PURPLE,
+    borderWidth: 2,
   },
   selectedCard: {
-    backgroundColor: SELECTED_CARD_STYLES.BACKGROUND_COLOR,
-    borderColor: SELECTED_CARD_STYLES.BORDER_COLOR,
+    borderColor: YELLOW,
     borderWidth: SELECTED_CARD_STYLES.BORDER_WIDTH,
   },
   cardTitle: {
     marginBottom: 4,
+    ...styleSheet.DECK_CARD_TEXT,
   },
   cardDescription: {
     marginBottom: 4,
+    ...styleSheet.DECK_CARD_TEXT,
   },
   fab: {
     position: 'absolute',
