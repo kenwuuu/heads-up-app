@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, Surface, Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
 import {Audio} from 'expo-av';
 import * as Haptics from 'expo-haptics';
@@ -14,6 +14,7 @@ import {
   SPACING,
   TEXT_STYLES,
 } from '@/src/constants/constants';
+
 
 // Constants for tilt detection
 const BETA_TILT_THRESHOLD = 10; // degrees
@@ -168,11 +169,9 @@ export default function GameScreen() {
           <Text variant="headlineMedium" style={styles.timer}>
             {timeLeft}s
           </Text>
-          <Surface style={styles.wordCard} elevation={4}>
-            <Text variant="headlineLarge" style={styles.word}>
-              {currentWord?.text || DEFAULT_READY_TEXT}
-            </Text>
-          </Surface>
+          <Text variant="headlineLarge" style={styles.word}>
+            {currentWord?.text || DEFAULT_READY_TEXT}
+          </Text>
           <Text variant="titleLarge" style={styles.score}>
             Score: {score}
           </Text>
@@ -198,7 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: SPACING.LARGE,
+    padding: 20,
   },
   countdownContainer: {
     flex: 1,
@@ -210,8 +209,8 @@ const styles = StyleSheet.create({
   },
   homeButton: {
     alignSelf: 'center',
-    marginBottom: SPACING.LARGE,
-    borderRadius: SPACING.LARGE,
+    marginBottom: 20,
+    borderRadius: 20,
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: {
@@ -222,18 +221,22 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   timer: {
-    ...TEXT_STYLES.TIMER,
+    marginTop: 20,
   },
   wordCard: {
-    ...CARD_STYLES,
+    padding: 40,
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
   },
   word: {
+    padding: 80,
     textAlign: 'center',
-    ...TEXT_STYLES.WORD,
+    fontSize: 80,
   },
   score: {
-    marginBottom: SPACING.LARGE,
-    ...TEXT_STYLES.SCORE,
+    marginBottom: 20,
   },
   tiltIndicator: {
     fontWeight: 'bold',
