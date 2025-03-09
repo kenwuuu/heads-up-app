@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   timer: {
-    marginTop: SPACING.LARGE,
     ...TEXT_STYLES.TIMER,
   },
   wordCard: {

@@ -43,11 +43,13 @@ export const AUDIO_CONFIG = {
 // Text styles
 export const TEXT_STYLES = {
   TIMER: {
+    paddingTop: 10,
     fontSize: 48,
     fontWeight: '700' as const,
     color: '#333',
   },
   COUNTDOWN: {
+    padding: 80,
     fontSize: 72,
     fontWeight: '700' as const,
     color: '#333',
@@ -68,8 +70,8 @@ export const TEXT_STYLES = {
 export const SPACING = {
   SMALL: 8,
   MEDIUM: 16,
-  LARGE: 20,
-  XLARGE: 40,
+  LARGE: 32,
+  XLARGE: 64,
 };
 
 // Card styles
