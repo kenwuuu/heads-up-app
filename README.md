@@ -62,3 +62,12 @@ cd heads-up-app && npm install && npx expo start
 ### Words
 
 Codenames: [this repo](https://github.com/jacksun007/codenames)
+
+## Style - by [joell](http://johwells.com)
+
+### Fonts
+
+Using Montserrat; weight
+If we make money, then Deuterium; weight
+
+### Colors
