@@ -32,6 +32,8 @@ export default function GameScreen() {
     endGame
   } = useGameStore();
 
+  const MUTE = useGameStore((state) => state.isMuted);
+
   const [lastActionTime, setLastActionTime] = useState(0);
 
   // load sounds. there has got to be a better way to do this lol
@@ -97,8 +99,10 @@ export default function GameScreen() {
   useEffect(() => {
     if (timeLeft > 0 && isPlaying) {
       const timer = setInterval(async () => {
-        if (timeLeft <= 6 && timeLeft > 0) {  // tick 5, 4, 3, 2, 1, 0
-          await tickSoundObject.playAsync();
+        if (timeLeft <= 6 && timeLeft >= 0) {  // tick 5, 4, 3, 2, 1, 0
+          if (!MUTE) {
+            tickSoundObject.playAsync();
+          }
         }
 
         useGameStore.setState((state) => ({timeLeft: state.timeLeft - 1}));
@@ -114,18 +118,18 @@ export default function GameScreen() {
   }, [timeLeft, isPlaying, score]);
 
   // Handle correct/incorrect with sound and haptics
-  const handleAnswer = async (isCorrect: boolean, correctSound: Audio.Sound, incorrectSound: Audio.Sound) => {
+  const handleAnswer = (isCorrect: boolean, correctSound: Audio.Sound, incorrectSound: Audio.Sound) => {
     if (isCorrect) {
-      await Promise.all([
-        correctSound.playAsync(),
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-      ]);
+      if (!MUTE) {
+        correctSound.playAsync()
+      }
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
       markCorrect();
     } else {
-      await Promise.all([
-        incorrectSound.playAsync(),
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-      ]);
+      if (!MUTE) {
+        incorrectSound.playAsync()
+      }
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
       markIncorrect();
     }
   };

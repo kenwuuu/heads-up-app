@@ -1,14 +1,16 @@
-import {Keyboard, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useState} from 'react';
+import {Keyboard, StyleSheet, Switch, TouchableWithoutFeedback, View,} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {Stack} from 'expo-router';
 import {useGameStore} from '../src/zustand_state_store/gameStore';
-import {useState} from 'react';
 import {HINT_TEXT_COLOR, MINIMUM_GAME_DURATION_SECONDS} from '../src/constants/constants';
-import {SafeAreaView} from "react-native-safe-area-context";
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
   const gameDuration = useGameStore((state) => state.gameDuration);
   const setGameDuration = useGameStore((state) => state.setGameDuration);
+  const isMuted = useGameStore((state) => state.isMuted);
+  const toggleMute = useGameStore((state) => state.toggleMute);
   const [durationInput, setDurationInput] = useState(gameDuration.toString());
 
   const handleDurationChange = (text: string) => {
@@ -19,12 +21,17 @@ export default function SettingsScreen() {
     }
   };
 
+  const handleMuteChange = (value: boolean) => {
+    toggleMute();
+  }
+
   return (
     <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <Stack.Screen options={{title: 'Game Settings'}}/>
 
+          {/* Game Duration Section */}
           <View style={styles.section}>
             <Text variant="titleMedium" style={styles.sectionTitle}>
               Game Duration
@@ -43,6 +50,22 @@ export default function SettingsScreen() {
             <Text variant="bodySmall" style={styles.hint}>
               Enter the number of seconds for each round (minimum: {MINIMUM_GAME_DURATION_SECONDS}s)
             </Text>
+          </View>
+
+          {/* Audio Mute Section */}
+          <View style={styles.section}>
+            <Text variant="titleMedium" style={styles.sectionTitle}>
+              Mute Game Audio
+            </Text>
+            <View style={styles.toggleContainer}>
+              <Text style={styles.toggleLabel}>
+                {isMuted ? 'Muted' : 'Unmuted'}
+              </Text>
+              <Switch
+                value={isMuted}
+                onValueChange={handleMuteChange}
+              />
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -71,5 +94,13 @@ const styles = StyleSheet.create({
   },
   hint: {
     color: HINT_TEXT_COLOR,
-  }
-}); 
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  toggleLabel: {
+    fontSize: 16,
+  },
+});

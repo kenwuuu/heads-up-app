@@ -7,9 +7,11 @@ interface GameState {
   selectedDeck: Deck | null;
   setSelectedDeck: (deck: Deck) => void;
 
-  // Game settings
+  // Settings
   gameDuration: number;
   setGameDuration: (seconds: number) => void;
+  isMuted: boolean;
+  toggleMute: () => void;
 
   // Game state
   isPlaying: boolean;
@@ -36,12 +38,15 @@ export const useGameStore = create<GameState>((set, get) => ({
   gameDuration: DEFAULT_GAME_DURATION_SECONDS,
   timeLeft: DEFAULT_GAME_DURATION_SECONDS,
   roundWords: [],
+  isMuted: false,
 
   // Deck selection
   setSelectedDeck: (deck) => set({ selectedDeck: deck }),
 
   // Game settings
   setGameDuration: (seconds) => set({ gameDuration: seconds }),
+
+  toggleMute: () => set({isMuted: !get().isMuted}),
 
   // Game actions
   startGame: (deck) => {
