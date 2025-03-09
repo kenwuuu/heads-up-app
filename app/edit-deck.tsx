@@ -168,8 +168,6 @@ export default function EditDeckScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
     display: 'flex',
   },
   safeAreaContainer: {
