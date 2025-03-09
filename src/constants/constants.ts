@@ -1,3 +1,7 @@
+// this contains all the constants necessary to change the
+// functionality of the app without knowing how to code
+
+
 // App Text
 export const APP_NAME = "Head2Head";
 
@@ -5,7 +9,6 @@ export const APP_NAME = "Head2Head";
 export const DEFAULT_GAME_DURATION_SECONDS = 60;
 export const MINIMUM_GAME_DURATION_SECONDS = 1;
 export const DEFAULT_READY_TEXT = 'Ready?';
-export const COUNTDOWN_START = 3;
 export const COUNTDOWN_TIME = 3;
 
 // Layout constants
