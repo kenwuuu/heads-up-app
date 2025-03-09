@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Surface, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
@@ -6,7 +6,14 @@ import {Audio} from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
-import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT} from '@/src/constants/constants';
+import {
+  AUDIO_CONFIG,
+  BUTTON_COLORS,
+  CARD_STYLES,
+  DEFAULT_READY_TEXT,
+  SPACING,
+  TEXT_STYLES,
+} from '@/src/constants/constants';
 
 // Constants for tilt detection
 const BETA_TILT_THRESHOLD = 10; // degrees
@@ -29,7 +36,9 @@ export default function GameScreen() {
     isPlaying,
     markCorrect,
     markIncorrect,
-    endGame
+    endGame,
+    countdownTime,
+    showCountdown,
   } = useGameStore();
 
   const MUTE = useGameStore((state) => state.isMuted);
@@ -97,7 +106,7 @@ export default function GameScreen() {
 
   // Timer effect
   useEffect(() => {
-    if (timeLeft > 0 && isPlaying) {
+    if (timeLeft > 0 && isPlaying && !showCountdown) {  // Only start timer after countdown
       const timer = setInterval(async () => {
         if (timeLeft <= 6 && timeLeft >= 0) {  // tick 5, 4, 3, 2, 1, 0
           if (!MUTE) {
@@ -115,7 +124,20 @@ export default function GameScreen() {
         params: { score }
       });
     }
-  }, [timeLeft, isPlaying, score]);
+  }, [timeLeft, isPlaying, showCountdown, score]);
+
+  // Countdown effect
+  useEffect(() => {
+    if (showCountdown && countdownTime > 0) {
+      const countdownTimer = setInterval(() => {
+        useGameStore.setState((state) => ({countdownTime: state.countdownTime - 1}));
+      }, 1000);
+
+      return () => clearInterval(countdownTimer);
+    } else if (countdownTime === 0) {
+      useGameStore.setState((state) => ({showCountdown: false}));
+    }
+  }, [countdownTime, showCountdown]);
 
   // Handle correct/incorrect with sound and haptics
   const handleAnswer = (isCorrect: boolean, correctSound: Audio.Sound, incorrectSound: Audio.Sound) => {
@@ -137,28 +159,36 @@ export default function GameScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Play' }} />
-      <Text variant="headlineMedium" style={styles.timer}>
-        {timeLeft}s
-      </Text>
-      <Surface style={styles.wordCard} elevation={4}>
-        <Text variant="headlineLarge" style={styles.word}>
-          {currentWord?.text || DEFAULT_READY_TEXT}
-        </Text>
-      </Surface>
-      <Text variant="titleLarge" style={styles.score}>
-        Score: {score}
-      </Text>
-      <Button
-        mode="contained"
-        icon="home"
-        onPress={() => {
-          endGame();
-          router.navigate('/');
-        }}
-        style={styles.homeButton}
-      >
-        Home
-      </Button>
+      {showCountdown ? (
+        <View style={styles.countdownContainer}>
+          <Text variant="displayLarge" style={styles.countdown}>{countdownTime}</Text>
+        </View>
+      ) : (
+        <>
+          <Text variant="headlineMedium" style={styles.timer}>
+            {timeLeft}s
+          </Text>
+          <Surface style={styles.wordCard} elevation={4}>
+            <Text variant="headlineLarge" style={styles.word}>
+              {currentWord?.text || DEFAULT_READY_TEXT}
+            </Text>
+          </Surface>
+          <Text variant="titleLarge" style={styles.score}>
+            Score: {score}
+          </Text>
+          <Button
+            mode="contained"
+            icon="home"
+            onPress={() => {
+              endGame();
+              router.navigate('/');
+            }}
+            style={styles.homeButton}
+          >
+            Home
+          </Button>
+        </>
+      )}
     </View>
   );
 }
@@ -168,12 +198,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: SPACING.LARGE,
+  },
+  countdownContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  countdown: {
+    ...TEXT_STYLES.COUNTDOWN,
   },
   homeButton: {
     alignSelf: 'center',
-    marginBottom: 20,
-    borderRadius: 20,
+    marginBottom: SPACING.LARGE,
+    borderRadius: SPACING.LARGE,
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: {
@@ -184,20 +222,19 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   timer: {
-    marginTop: 20,
+    marginTop: SPACING.LARGE,
+    ...TEXT_STYLES.TIMER,
   },
   wordCard: {
-    padding: 40,
-    width: '90%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 12,
+    ...CARD_STYLES,
   },
   word: {
     textAlign: 'center',
+    ...TEXT_STYLES.WORD,
   },
   score: {
-    marginBottom: 20,
+    marginBottom: SPACING.LARGE,
+    ...TEXT_STYLES.SCORE,
   },
   tiltIndicator: {
     fontWeight: 'bold',

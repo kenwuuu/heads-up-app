@@ -1,7 +1,8 @@
 import {StyleSheet, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {router, Stack, useLocalSearchParams} from 'expo-router';
-import {useGameStore} from '../src/zustand_state_store/gameStore';
+import {useGameStore} from '@/src/zustand_state_store/gameStore';
+import {handleStartGame} from "@/app/gameUtils";
 
 export default function ResultsScreen() {
   const { score } = useLocalSearchParams<{ score: string }>();
@@ -21,10 +22,7 @@ export default function ResultsScreen() {
         <Button
           mode="contained"
           onPress={() => {
-            if (selectedDeck) {
-              startGame(selectedDeck);
-              router.replace('/game');
-            }
+            handleStartGame(selectedDeck, startGame);
           }}
           style={styles.button}
         >

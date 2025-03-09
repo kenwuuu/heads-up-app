@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 import {Deck, Word} from '../../decks/decks';
-import {DEFAULT_GAME_DURATION_SECONDS} from '../constants/constants';
+import {COUNTDOWN_TIME, DEFAULT_GAME_DURATION_SECONDS} from '../constants/constants';
 
 interface GameState {
   // Selected deck
@@ -19,6 +19,8 @@ interface GameState {
   score: number;
   timeLeft: number;
   roundWords: Word[];
+  countdownTime: number;
+  showCountdown: boolean;
 
   // Game actions
   startGame: (deck: Deck) => void;
@@ -39,6 +41,8 @@ export const useGameStore = create<GameState>((set, get) => ({
   timeLeft: DEFAULT_GAME_DURATION_SECONDS,
   roundWords: [],
   isMuted: false,
+  countdownTime: COUNTDOWN_TIME,
+  showCountdown: true,
 
   // Deck selection
   setSelectedDeck: (deck) => set({ selectedDeck: deck }),
@@ -59,6 +63,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       score: 0,
       timeLeft: gameDuration,
       roundWords: shuffledWords,
+      countdownTime: COUNTDOWN_TIME,
+      showCountdown: true,
     });
   },
 

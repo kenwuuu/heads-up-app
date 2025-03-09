@@ -1,6 +1,5 @@
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {Card, FAB, Text} from 'react-native-paper';
-import {router} from 'expo-router';
 import {useDeckStore} from '@/src/zustand_state_store/deckStore';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {Deck} from '@/decks/decks';
@@ -11,6 +10,7 @@ import {
   GRID_SPACING_MULTIPLIER,
   SELECTED_CARD_STYLES
 } from '@/src/constants/constants';
+import {handleStartGame} from "@/app/gameUtils";
 
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = (screenWidth - (GRID_COLUMN_COUNT + 1) * GRID_SPACING * 2) / GRID_COLUMN_COUNT;
@@ -21,12 +21,6 @@ export default function HomeScreen() {
   const setSelectedDeck = useGameStore((state) => state.setSelectedDeck);
   const startGame = useGameStore((state) => state.startGame);
 
-  const handleStartGame = () => {
-    if (selectedDeck) {
-      startGame(selectedDeck);
-      router.push('/game');
-    }
-  };
 
   const renderDeckCard = ({ item: deck }: { item: Deck }) => (
     <Card
@@ -70,7 +64,9 @@ export default function HomeScreen() {
         <FAB
           icon="play"
           style={styles.fab}
-          onPress={handleStartGame}
+          onPress={() => {
+            handleStartGame(selectedDeck, startGame)
+          }}
           disabled={!selectedDeck}
           label="Start Game"
         />
