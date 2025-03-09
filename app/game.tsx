@@ -9,10 +9,13 @@ import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT} from '@/src/constants/constants';
 
 // Constants for tilt detection
-const BETA_TILT_THRESHOLD = 20; // degrees
-const GAMMA_TILT_THRESHOLD = 50; // degrees
+const BETA_TILT_THRESHOLD = 10; // degrees
+const GAMMA_TILT_THRESHOLD = 40; // degrees
 const DEBOUNCE_TIME = 1000; // milliseconds
 const VERTICAL_OFFSET_DEGREES = 90;
+const MILLISECONDS_PER_SECOND = 1000;
+const MOTION_REFRESH_RATE = 120; // hz/fps
+const MOTION_UPDATE_INTERVAL = MILLISECONDS_PER_SECOND / MOTION_REFRESH_RATE;
 
 export default function GameScreen() {
   /**
@@ -43,7 +46,7 @@ export default function GameScreen() {
         staysActiveInBackground: AUDIO_CONFIG.STAYS_ACTIVE_IN_BACKGROUND,
       });
 
-      DeviceMotion.setUpdateInterval(100); // Update every 100ms
+      DeviceMotion.setUpdateInterval(MOTION_UPDATE_INTERVAL);
       const subscription = DeviceMotion.addListener(({ rotation }) => {
         // Convert radians to degrees and get the tilt angle
         const degrees = 180;
