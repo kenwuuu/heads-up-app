@@ -74,11 +74,17 @@ export default function GameScreen() {
         if (now - lastActionTime < DEBOUNCE_TIME) return;
 
         function isValidDownTilt() { // if statement helper function
-          return gammaTiltDegrees <= -GAMMA_TILT_THRESHOLD && -BETA_TILT_THRESHOLD <= betaTiltDegrees && betaTiltDegrees <= BETA_TILT_THRESHOLD;
+          return !showCountdown &&
+            gammaTiltDegrees <= -GAMMA_TILT_THRESHOLD
+            && -BETA_TILT_THRESHOLD <= betaTiltDegrees
+            && betaTiltDegrees <= BETA_TILT_THRESHOLD;
         }
 
         function isValidUpTilt() { // if statement helper function
-          return gammaTiltDegrees >= GAMMA_TILT_THRESHOLD && -BETA_TILT_THRESHOLD <= betaTiltDegrees && betaTiltDegrees <= BETA_TILT_THRESHOLD;
+          return !showCountdown &&
+            gammaTiltDegrees >= GAMMA_TILT_THRESHOLD
+            && -BETA_TILT_THRESHOLD <= betaTiltDegrees
+            && betaTiltDegrees <= BETA_TILT_THRESHOLD;
         }
 
         // Check for tilt thresholds
@@ -95,7 +101,7 @@ export default function GameScreen() {
         subscription.remove();
         DeviceMotion.removeAllListeners();
       };
-    }, [lastActionTime, isPlaying])
+    }, [lastActionTime, isPlaying, showCountdown])
   );
 
   // Timer effect
