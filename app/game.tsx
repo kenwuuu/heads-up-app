@@ -135,7 +135,7 @@ export default function GameScreen() {
 
       return () => clearInterval(countdownTimer);
     } else if (countdownTime === 0) {
-      useGameStore.setState((state) => ({showCountdown: false}));
+      useGameStore.setState(() => ({showCountdown: false}));
     }
   }, [countdownTime, showCountdown]);
 
