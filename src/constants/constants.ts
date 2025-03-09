@@ -1,3 +1,6 @@
+// App Text
+export const APP_NAME = "Head2Head";
+
 // Game UI constants
 export const DEFAULT_GAME_DURATION_SECONDS = 60;
 export const MINIMUM_GAME_DURATION_SECONDS = 1;

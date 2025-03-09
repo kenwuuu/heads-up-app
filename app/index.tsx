@@ -5,6 +5,7 @@ import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {Deck} from '@/decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
+  APP_NAME,
   GRID_COLUMN_COUNT,
   GRID_SPACING,
   GRID_SPACING_MULTIPLIER,
@@ -57,7 +58,7 @@ export default function HomeScreen() {
           style={styles.flatList}
           ListHeaderComponent={
             <Text variant="headlineLarge" style={styles.title}>
-              Heads Up!
+              {APP_NAME}
             </Text>
           }
         />
