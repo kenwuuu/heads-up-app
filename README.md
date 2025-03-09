@@ -33,7 +33,11 @@ cd heads-up-app && npm install && npx expo start
 
 ## Building
 
-### Steps
+- https://docs.expo.dev/get-started/set-up-your-environment/?mode=development-build&platform=ios&device=physical
+- https://www.reddit.com/r/reactnative/comments/1981n5q/how_to_run_expo_app_on_a_physical_device_without/
+- https://docs.expo.dev/more/expo-cli/#compiling
+
+### Setup
 
 1. **Install EAS CLI**
    ```bash
