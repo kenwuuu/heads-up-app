@@ -6,6 +6,9 @@ import {
   Montserrat_900Black,
   useFonts
 } from "@expo-google-fonts/montserrat";
+import {BUTTON_COLORS, GRID_SPACING, GRID_SPACING_MULTIPLIER} from "@/src/constants/constants";
+// noinspection ES6PreferShortImport
+import {cardWidth} from "@/app/index";
 
 // come in and change the entire look of the app without knowing how to code
 // this contains all the constants necessary for a graphics designer to
@@ -75,3 +78,123 @@ export const TAB_BAR = {
   backgroundColor: NAVY,
   borderTopWidth: 0,
 };
+
+// Stylesheets: Game - game.tsx
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    backgroundColor: PURPLE,
+  },
+  countdownContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  countdown: {
+    paddingTop: 140,
+    fontSize: 180,
+    ...FONT.MONTSERRAT_800EXTRABOLD,
+  },
+  homeButton: {
+    alignSelf: 'center',
+    marginBottom: 20,
+    borderRadius: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  gameTimer: {
+    marginTop: 20,
+  },
+  wordCard: {
+    padding: 40,
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+  },
+  word: {
+    paddingTop: 80,
+    textAlign: 'center',
+    fontSize: 100,
+    ...FONT.MONTSERRAT_900BLACK,
+  },
+  score: {
+    marginBottom: 20,
+  },
+  tiltIndicator: {
+    fontWeight: 'bold',
+  },
+  correctTilt: {
+    color: BUTTON_COLORS.CORRECT,
+  },
+  incorrectTilt: {
+    color: BUTTON_COLORS.INCORRECT,
+  },
+});
+
+export const homescreenStyles = StyleSheet.create({
+  flatList: {
+    paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+  },
+  appTitle: {
+    textAlign: 'center',
+    marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+    paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
+    fontSize: 48,
+    ...FONT.MONTSERRAT_800EXTRABOLD,
+    ...styleSheet.GAME_TEXT
+  },
+  grid: {
+    paddingBottom: 80, // Add padding for FAB
+    paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+  },
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+  },
+  card: {
+    width: cardWidth,
+    marginHorizontal: 0,
+    backgroundColor: NAVY,
+    borderColor: PURPLE,
+    borderWidth: 1.5,
+  },
+  cardContent: {
+    paddingVertical: 10,
+    paddingLeft: 10,
+    paddingRight: 10, // if we don't do this, then the "Superheroes" deck will have an empty second line even though it doesn't actually flow into it. if we can fix this, then just make paddingHorizontal: 10
+  },
+  selectedCard: {
+    borderColor: YELLOW,
+    borderWidth: 1,
+  },
+  cardTitle: {
+    fontSize: 20,
+    ...FONT.MONTSERRAT_800EXTRABOLD,
+    ...styleSheet.DECK_CARD_TEXT,
+  },
+  cardDeckLength: {
+    ...FONT.MONTSERRAT_700BOLD,
+    ...styleSheet.DECK_CARD_TEXT,
+  },
+  cardDeckDescription: {
+    marginTop: 14,
+    ...FONT.MONTSERRAT_500MEDIUM,
+    ...styleSheet.DECK_CARD_TEXT,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    alignSelf: 'center',
+    bottom: 0,
+  },
+});

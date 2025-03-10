@@ -3,7 +3,7 @@
 
 
 // App Text
-export const APP_NAME = "Head2Head";
+export const APP_NAME = "head2head";
 
 // Game UI constants
 export const DEFAULT_GAME_DURATION_SECONDS = 60;
@@ -22,10 +22,10 @@ export const GRID_SPACING_MULTIPLIER = {
 };
 
 // UI Theme constants
-export const SELECTED_CARD_STYLES = {
+export const SELECTED_CARD_COLORS = {
   BACKGROUND_COLOR: '#e8f0fe',
   BORDER_COLOR: '#1a73e8',
-  BORDER_WIDTH: 2,
+  BORDER_WIDTH: 1,
 };
 
 // Button colors

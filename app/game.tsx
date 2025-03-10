@@ -1,13 +1,13 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
 import {Audio} from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
-import {AUDIO_CONFIG, BUTTON_COLORS, DEFAULT_READY_TEXT,} from '@/src/constants/constants';
-import {PURPLE, styleSheet} from '@/src/constants/stylingConstants';
+import {AUDIO_CONFIG, DEFAULT_READY_TEXT,} from '@/src/constants/constants';
+import {styles, styleSheet} from '@/src/constants/stylingConstants';
 
 
 // Constants for tilt detection
@@ -191,64 +191,3 @@ export default function GameScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 20,
-    backgroundColor: PURPLE,
-  },
-  countdownContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  countdown: {
-    padding: 80,
-    fontSize: 72,
-    fontWeight: '700' as const,
-    color: '#333',
-  },
-  homeButton: {
-    alignSelf: 'center',
-    marginBottom: 20,
-    borderRadius: 20,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  gameTimer: {
-    marginTop: 20,
-  },
-  wordCard: {
-    padding: 40,
-    width: '90%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 12,
-  },
-  word: {
-    paddingTop: 120,
-    textAlign: 'center',
-    fontSize: 140,
-  },
-  score: {
-    marginBottom: 20,
-  },
-  tiltIndicator: {
-    fontWeight: 'bold',
-  },
-  correctTilt: {
-    color: BUTTON_COLORS.CORRECT,
-  },
-  incorrectTilt: {
-    color: BUTTON_COLORS.INCORRECT,
-  },
-}); 
