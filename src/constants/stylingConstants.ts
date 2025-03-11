@@ -6,7 +6,7 @@ import {
   Montserrat_900Black,
   useFonts
 } from "@expo-google-fonts/montserrat";
-import {BUTTON_COLORS, GRID_SPACING, GRID_SPACING_MULTIPLIER} from "@/src/constants/constants";
+import {BUTTON_COLORS, GRID_SPACING, GRID_SPACING_MULTIPLIER, HINT_TEXT_COLOR} from "@/src/constants/constants";
 // noinspection ES6PreferShortImport
 import {cardWidth} from "@/app/index";
 
@@ -200,5 +200,36 @@ export const homescreenStyles = StyleSheet.create({
     margin: 16,
     alignSelf: 'center',
     bottom: 0,
+  },
+});
+export const settingsStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+  },
+  safeAreaContainer: {
+    flex: 1,
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    marginBottom: 16,
+  },
+  input: {
+    marginBottom: 8,
+  },
+  hint: {
+    color: HINT_TEXT_COLOR,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  toggleLabel: {
+    fontSize: 16,
   },
 });

@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {Keyboard, StyleSheet, Switch, TouchableWithoutFeedback, View,} from 'react-native';
+import {Keyboard, Switch, TouchableWithoutFeedback, View,} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {Stack} from 'expo-router';
 import {useGameStore} from '../src/zustand_state_store/gameStore';
-import {HINT_TEXT_COLOR, MINIMUM_GAME_DURATION_SECONDS} from '../src/constants/constants';
+import {MINIMUM_GAME_DURATION_SECONDS} from '../src/constants/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {settingsStyles} from "@/src/constants/stylingConstants";
 
 export default function SettingsScreen() {
   const gameDuration = useGameStore((state) => state.gameDuration);
@@ -26,14 +27,14 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
+    <SafeAreaView style={settingsStyles.safeAreaContainer} edges={['top']}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
+        <View style={settingsStyles.container}>
           <Stack.Screen options={{title: 'Game Settings'}}/>
 
           {/* Game Duration Section */}
-          <View style={styles.section}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>
+          <View style={settingsStyles.section}>
+            <Text variant="titleMedium" style={settingsStyles.sectionTitle}>
               Game Duration
             </Text>
             <TextInput
@@ -41,24 +42,24 @@ export default function SettingsScreen() {
               value={durationInput}
               onChangeText={handleDurationChange}
               keyboardType="number-pad"
-              style={styles.input}
+              style={settingsStyles.input}
               error={
                 isNaN(parseInt(durationInput, 10)) ||
                 parseInt(durationInput, 10) < MINIMUM_GAME_DURATION_SECONDS
               }
             />
-            <Text variant="bodySmall" style={styles.hint}>
+            <Text variant="bodySmall" style={settingsStyles.hint}>
               Enter the number of seconds for each round (minimum: {MINIMUM_GAME_DURATION_SECONDS}s)
             </Text>
           </View>
 
           {/* Audio Mute Section */}
-          <View style={styles.section}>
-            <Text variant="titleMedium" style={styles.sectionTitle}>
+          <View style={settingsStyles.section}>
+            <Text variant="titleMedium" style={settingsStyles.sectionTitle}>
               Mute Game Audio
             </Text>
-            <View style={styles.toggleContainer}>
-              <Text style={styles.toggleLabel}>
+            <View style={settingsStyles.toggleContainer}>
+              <Text style={settingsStyles.toggleLabel}>
                 {isMuted ? 'Muted' : 'Unmuted'}
               </Text>
               <Switch
@@ -73,34 +74,3 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-  },
-  input: {
-    marginBottom: 8,
-  },
-  hint: {
-    color: HINT_TEXT_COLOR,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  toggleLabel: {
-    fontSize: 16,
-  },
-});
