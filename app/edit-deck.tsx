@@ -1,5 +1,5 @@
 import {useCallback, useRef, useState} from 'react';
-import {KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, ScrollView, View} from 'react-native';
 import {Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {router, useLocalSearchParams} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
@@ -7,6 +7,7 @@ import {Deck, Word} from '../decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import {useFocusEffect} from '@react-navigation/native';
+import {editDeckMenuStyles} from "@/src/constants/stylingConstants";
 
 export default function EditDeckScreen() {
   const { deckId } = useLocalSearchParams<{ deckId: string }>();
@@ -70,19 +71,19 @@ export default function EditDeckScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
+    <SafeAreaView style={editDeckMenuStyles.safeAreaContainer} edges={['top']}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.container}
+        style={editDeckMenuStyles.container}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         <ScrollView
           ref={scrollViewRef}
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}
+          style={editDeckMenuStyles.scrollView}
+          contentContainerStyle={editDeckMenuStyles.scrollViewContent}
           keyboardShouldPersistTaps="handled"
         >
-          <Text variant="titleMedium" style={styles.sectionTitle}>
+          <Text variant="titleMedium" style={editDeckMenuStyles.sectionTitle}>
             Deck Info
           </Text>
 
@@ -90,25 +91,25 @@ export default function EditDeckScreen() {
             label="Deck Title"
             value={title}
             onChangeText={setTitle}
-            style={styles.input}
+            style={editDeckMenuStyles.input}
           />
           <TextInput
             label="Description"
             value={description}
             onChangeText={setDescription}
-            style={styles.input}
+            style={editDeckMenuStyles.input}
           />
 
-          <Text variant="titleMedium" style={styles.sectionTitle}>
+          <Text variant="titleMedium" style={editDeckMenuStyles.sectionTitle}>
             Add a Word
           </Text>
 
-          <View style={styles.addWordContainer}>
+          <View style={editDeckMenuStyles.addWordContainer}>
             <TextInput
               label="New Word"
               value={newWord}
               onChangeText={setNewWord}
-              style={styles.wordInput}
+              style={editDeckMenuStyles.wordInput}
             />
             <Button
               onPress={() => {
@@ -121,12 +122,12 @@ export default function EditDeckScreen() {
             </Button>
           </View>
 
-          <Text variant="titleMedium" style={styles.sectionTitle}>
+          <Text variant="titleMedium" style={editDeckMenuStyles.sectionTitle}>
             Words
           </Text>
 
           {words.map((word) => (
-            <View key={word.id} style={styles.wordItem}>
+            <View key={word.id} style={editDeckMenuStyles.wordItem}>
               <Text variant="bodyLarge">{word.text}</Text>
               <IconButton
                 icon="delete"
@@ -139,13 +140,13 @@ export default function EditDeckScreen() {
           ))}
         </ScrollView>
 
-        <View style={styles.buttonContainer}>
+        <View style={editDeckMenuStyles.buttonContainer}>
           <Button
             mode="contained"
             onPress={() => {
               handleSave();
             }}
-            style={styles.button}
+            style={editDeckMenuStyles.button}
             disabled={!title.trim() || words.length === 0}
           >
             Save Deck
@@ -155,7 +156,7 @@ export default function EditDeckScreen() {
             onPress={() => {
               router.push('/decks');
             }}
-            style={styles.button}
+            style={editDeckMenuStyles.button}
           >
             Cancel
           </Button>
@@ -165,53 +166,3 @@ export default function EditDeckScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    display: 'flex',
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    padding: 16,
-  },
-  input: {
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    marginBottom: 16,
-  },
-  wordItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: '#f5f5f5',
-    marginBottom: 8,
-    borderRadius: 8,
-  },
-  addWordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-    gap: 8,
-  },
-  wordInput: {
-    flex: 1,
-  },
-  buttonContainer: {
-    padding: 16,
-    gap: 8,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-  },
-  button: {
-    width: '100%',
-  },
-});

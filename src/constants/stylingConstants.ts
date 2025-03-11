@@ -145,6 +145,7 @@ export const gameStyles = StyleSheet.create({
   },
 });
 
+// Stylesheets: Home Screen - index.tsx
 export const homescreenStyles = StyleSheet.create({
   flatList: {
     paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
@@ -202,6 +203,8 @@ export const homescreenStyles = StyleSheet.create({
     bottom: 0,
   },
 });
+
+// Stylesheets: Settings - settings.tsx
 export const settingsStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -231,5 +234,57 @@ export const settingsStyles = StyleSheet.create({
   },
   toggleLabel: {
     fontSize: 16,
+  },
+});
+
+// Stylesheets: Edit Decks - edit-deck.tsx
+export const editDeckMenuStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    display: 'flex',
+  },
+  safeAreaContainer: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    padding: 16,
+  },
+  input: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    marginBottom: 16,
+  },
+  wordItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#f5f5f5',
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  addWordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 8,
+  },
+  wordInput: {
+    flex: 1,
+  },
+  buttonContainer: {
+    padding: 16,
+    gap: 8,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+  },
+  button: {
+    width: '100%',
   },
 });
