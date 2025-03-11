@@ -80,7 +80,7 @@ export const TAB_BAR = {
 };
 
 // Stylesheets: Game - game.tsx
-export const styles = StyleSheet.create({
+export const gameStyles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
@@ -110,9 +110,12 @@ export const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    ...FONT.MONTSERRAT_700BOLD,
   },
   gameTimer: {
-    marginTop: 20,
+    paddingTop: 36,
+    fontSize: 48,
+    ...FONT.MONTSERRAT_500MEDIUM
   },
   wordCard: {
     padding: 40,
@@ -128,7 +131,8 @@ export const styles = StyleSheet.create({
     ...FONT.MONTSERRAT_900BLACK,
   },
   score: {
-    marginBottom: 20,
+    fontSize: 22,
+    ...FONT.MONTSERRAT_800EXTRABOLD,
   },
   tiltIndicator: {
     fontWeight: 'bold',
