@@ -98,7 +98,6 @@ export default function HomeScreen() {
           }
         />
         <FAB
-          icon="play"
           style={homescreenStyles.fab}
           onPress={() => {
             handleStartGame(selectedDeck, startGame)
