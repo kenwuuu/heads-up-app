@@ -6,7 +6,7 @@ import {
   Montserrat_900Black,
   useFonts
 } from "@expo-google-fonts/montserrat";
-import {GRID_SPACING, GRID_SPACING_MULTIPLIER, HINT_TEXT_COLOR} from "@/src/constants/constants";
+import {GRID_SPACING, GRID_SPACING_MULTIPLIER} from "@/src/constants/constants";
 // noinspection ES6PreferShortImport
 import {cardWidth} from "@/app/index";
 
@@ -67,6 +67,7 @@ export const styleSheet = StyleSheet.create({
   },
   TITLE: {
     color: PURPLE,
+    fontSize: 20,
     ...FONT.MONTSERRAT_800EXTRABOLD
   },
   CAPTION: {
@@ -213,9 +214,6 @@ export const settingsStyles = StyleSheet.create({
   input: {
     marginBottom: 8,
   },
-  hint: {
-    color: HINT_TEXT_COLOR,
-  },
   toggleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -240,6 +238,9 @@ export const editDeckMenuStyles = StyleSheet.create({
   },
   scrollViewContent: {
     padding: 16,
+  },
+  deckTitleSize: {
+    fontSize: 18,
   },
   input: {
     marginBottom: 16,

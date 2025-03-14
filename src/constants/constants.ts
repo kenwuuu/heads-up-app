@@ -37,8 +37,6 @@ export const BUTTON_COLORS = {
 // Layout dimensions
 export const MAX_BUTTON_CONTAINER_WIDTH = 300;
 
-// Text colors
-export const HINT_TEXT_COLOR = '#666';
 
 // Audio constants
 export const AUDIO_CONFIG = {

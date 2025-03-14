@@ -3,7 +3,7 @@ import {Button, FAB, List} from 'react-native-paper';
 import {router, Stack} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {SafeAreaView} from "react-native-safe-area-context";
-import {FONT, homescreenStyles, styleSheet} from "@/src/constants/stylingConstants";
+import {editDeckMenuStyles, FONT, homescreenStyles, styleSheet} from "@/src/constants/stylingConstants";
 
 export default function DecksScreen() {
   const decks = useDeckStore((state) => state.decks);
@@ -19,7 +19,7 @@ export default function DecksScreen() {
           renderItem={({item}) => (
             <List.Item
               title={item.title}
-              titleStyle={styleSheet.TITLE}
+              titleStyle={[styleSheet.TITLE, editDeckMenuStyles.deckTitleSize]}
               description={`${item.words.length} words • ${item.description}`}
               descriptionStyle={styleSheet.BODY}
               right={(props) => (

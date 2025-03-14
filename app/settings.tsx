@@ -34,7 +34,7 @@ export default function SettingsScreen() {
 
           {/* Game Duration Section */}
           <View style={settingsStyles.section}>
-            <Text variant="titleMedium" style={settingsStyles.sectionTitle}>
+            <Text variant="titleMedium" style={[styleSheet.TITLE, settingsStyles.sectionTitle]}>
               Game Duration
             </Text>
             <TextInput
@@ -48,18 +48,18 @@ export default function SettingsScreen() {
                 parseInt(durationInput, 10) < MINIMUM_GAME_DURATION_SECONDS
               }
             />
-            <Text variant="bodySmall" style={settingsStyles.hint}>
+            <Text variant="bodySmall" style={[styleSheet.BODY]}>
               Enter the number of seconds for each round (minimum: {MINIMUM_GAME_DURATION_SECONDS}s)
             </Text>
           </View>
 
           {/* Audio Mute Section */}
           <View style={settingsStyles.section}>
-            <Text variant="titleMedium" style={settingsStyles.sectionTitle}>
+            <Text variant="titleMedium" style={[styleSheet.TITLE, settingsStyles.sectionTitle]}>
               Mute Game Audio
             </Text>
             <View style={settingsStyles.toggleContainer}>
-              <Text style={settingsStyles.toggleLabel}>
+              <Text style={[styleSheet.CAPTION, settingsStyles.toggleLabel]}>
                 {isMuted ? 'Muted' : 'Unmuted'}
               </Text>
               <Switch
