@@ -67,13 +67,13 @@ export default function HomeScreen() {
       onPress={() => setSelectedDeck(deck)}
     >
       <Card.Content style={homescreenStyles.cardContent}>
-        <Text style={homescreenStyles.cardTitle}>
+        <Text style={[styleSheet.TITLE, homescreenStyles.cardTitleSize]}>
           {deck.title}
         </Text>
-        <Text style={homescreenStyles.cardDeckLength}>
+        <Text style={styleSheet.CAPTION}>
           {deck.words.length} words
         </Text>
-        <Text variant="bodySmall" numberOfLines={2} style={homescreenStyles.cardDeckDescription}>
+        <Text variant="bodySmall" numberOfLines={2} style={[styleSheet.BODY, homescreenStyles.cardBodyMargin]}>
           {deck.description}
         </Text>
       </Card.Content>

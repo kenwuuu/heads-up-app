@@ -16,7 +16,7 @@ interface DeckState {
 
 export const useDeckStore = create<DeckState>((set, get) => ({
   // Initial state with mock decks
-  decks: [duetDeck, codenamesDeck, mtgDeck, potterDeck, vanillaDeck, ...mockDecks],
+  decks: [duetDeck, mtgDeck, codenamesDeck, potterDeck, vanillaDeck, ...mockDecks],
 
   // Deck management actions
   addDeck: (deck) => {

@@ -5,7 +5,7 @@ import {Stack} from 'expo-router';
 import {useGameStore} from '../src/zustand_state_store/gameStore';
 import {MINIMUM_GAME_DURATION_SECONDS} from '../src/constants/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {settingsStyles} from "@/src/constants/stylingConstants";
+import {settingsStyles, styleSheet} from "@/src/constants/stylingConstants";
 
 export default function SettingsScreen() {
   const gameDuration = useGameStore((state) => state.gameDuration);
@@ -27,9 +27,9 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={settingsStyles.safeAreaContainer} edges={['top']}>
+    <SafeAreaView style={styleSheet.SAFE_AREA_CONTAINER} edges={['top']}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={settingsStyles.container}>
+        <View style={[styleSheet.BACKGROUND_CONTAINER, settingsStyles.container]}>
           <Stack.Screen options={{title: 'Game Settings'}}/>
 
           {/* Game Duration Section */}

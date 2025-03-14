@@ -7,7 +7,7 @@ import {Deck, Word} from '../decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import {useFocusEffect} from '@react-navigation/native';
-import {editDeckMenuStyles} from "@/src/constants/stylingConstants";
+import {editDeckMenuStyles, styleSheet} from "@/src/constants/stylingConstants";
 
 export default function EditDeckScreen() {
   const { deckId } = useLocalSearchParams<{ deckId: string }>();
@@ -71,7 +71,7 @@ export default function EditDeckScreen() {
   };
 
   return (
-    <SafeAreaView style={editDeckMenuStyles.safeAreaContainer} edges={['top']}>
+    <SafeAreaView style={styleSheet.SAFE_AREA_CONTAINER} edges={['top']}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={editDeckMenuStyles.container}

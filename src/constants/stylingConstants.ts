@@ -6,7 +6,7 @@ import {
   Montserrat_900Black,
   useFonts
 } from "@expo-google-fonts/montserrat";
-import {BUTTON_COLORS, GRID_SPACING, GRID_SPACING_MULTIPLIER, HINT_TEXT_COLOR} from "@/src/constants/constants";
+import {GRID_SPACING, GRID_SPACING_MULTIPLIER, HINT_TEXT_COLOR} from "@/src/constants/constants";
 // noinspection ES6PreferShortImport
 import {cardWidth} from "@/app/index";
 
@@ -33,27 +33,6 @@ export const NAVY = "#0d2763"
 
 // Components
 
-// Stylesheets: Global
-export const styleSheet = StyleSheet.create({
-  BACKGROUND_CONTAINER: {
-    flex: 1,
-    backgroundColor: NAVY,
-  },
-  SAFE_AREA_CONTAINER: {
-    flex: 1,
-    backgroundColor: NAVY,
-  },
-  GAME_TEXT: {
-    color: YELLOW,
-  },
-  DECK_CARD_TEXT: {
-    color: PURPLE,
-  },
-  MENU_BACKGROUND: {
-    backgroundColor: NAVY,
-  }
-})
-
 // Stylesheets: Fonts
 export const FONT = StyleSheet.create({
   MONTSERRAT_500MEDIUM: {
@@ -70,7 +49,37 @@ export const FONT = StyleSheet.create({
   },
 })
 
-// Stylesheets: Home Menu - index.tsx
+// Stylesheets: Global
+export const styleSheet = StyleSheet.create({
+  BACKGROUND_CONTAINER: {
+    flex: 1,
+    backgroundColor: NAVY,
+  },
+  SAFE_AREA_CONTAINER: {
+    flex: 1,
+    backgroundColor: NAVY,
+  },
+  GAME_TEXT: {
+    color: YELLOW,
+  },
+  BUTTON_TEXT: {
+    color: YELLOW,
+  },
+  TITLE: {
+    color: PURPLE,
+    ...FONT.MONTSERRAT_800EXTRABOLD
+  },
+  CAPTION: {
+    color: PURPLE,
+    ...FONT.MONTSERRAT_700BOLD
+  },
+  BODY: {
+    color: PURPLE,
+    ...FONT.MONTSERRAT_500MEDIUM
+  }
+})
+
+// Stylesheets: General - _layout.tsx
 export const HIDE_TAB_BAR = {
   display: 'none'
 };
@@ -134,15 +143,6 @@ export const gameStyles = StyleSheet.create({
     fontSize: 22,
     ...FONT.MONTSERRAT_800EXTRABOLD,
   },
-  tiltIndicator: {
-    fontWeight: 'bold',
-  },
-  correctTilt: {
-    color: BUTTON_COLORS.CORRECT,
-  },
-  incorrectTilt: {
-    color: BUTTON_COLORS.INCORRECT,
-  },
 });
 
 // Stylesheets: Home Screen - index.tsx
@@ -176,25 +176,17 @@ export const homescreenStyles = StyleSheet.create({
   cardContent: {
     paddingVertical: 10,
     paddingLeft: 10,
-    paddingRight: 10, // if we don't do this, then the "Superheroes" deck will have an empty second line even though it doesn't actually flow into it. if we can fix this, then just make paddingHorizontal: 10
+    paddingRight: 10,
   },
   selectedCard: {
     borderColor: YELLOW,
     borderWidth: 1,
   },
-  cardTitle: {
+  cardTitleSize: {
     fontSize: 20,
-    ...FONT.MONTSERRAT_800EXTRABOLD,
-    ...styleSheet.DECK_CARD_TEXT,
   },
-  cardDeckLength: {
-    ...FONT.MONTSERRAT_700BOLD,
-    ...styleSheet.DECK_CARD_TEXT,
-  },
-  cardDeckDescription: {
+  cardBodyMargin: {
     marginTop: 14,
-    ...FONT.MONTSERRAT_500MEDIUM,
-    ...styleSheet.DECK_CARD_TEXT,
   },
   fab: {
     position: 'absolute',
@@ -207,10 +199,7 @@ export const homescreenStyles = StyleSheet.create({
 // Stylesheets: Settings - settings.tsx
 export const settingsStyles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
   },
   safeAreaContainer: {
     flex: 1,

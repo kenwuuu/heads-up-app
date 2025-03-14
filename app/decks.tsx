@@ -1,16 +1,17 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {Button, FAB, List} from 'react-native-paper';
 import {router, Stack} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {SafeAreaView} from "react-native-safe-area-context";
+import {FONT, homescreenStyles, styleSheet} from "@/src/constants/stylingConstants";
 
 export default function DecksScreen() {
   const decks = useDeckStore((state) => state.decks);
   const deleteDeck = useDeckStore((state) => state.deleteDeck);
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer} edges={['top']}>
-      <View style={styles.container}>
+    <SafeAreaView style={styleSheet.SAFE_AREA_CONTAINER} edges={['top']}>
+      <View style={styleSheet.BACKGROUND_CONTAINER}>
         <Stack.Screen options={{title: 'Manage Decks'}}/>
         <FlatList
           data={decks}
@@ -18,17 +19,24 @@ export default function DecksScreen() {
           renderItem={({item}) => (
             <List.Item
               title={item.title}
+              titleStyle={styleSheet.TITLE}
               description={`${item.words.length} words • ${item.description}`}
+              descriptionStyle={styleSheet.BODY}
               right={(props) => (
                 <View style={{flexDirection: 'row'}}>
                   <Button
                     {...props}
                     onPress={() => router.push(`/edit-deck?deckId=${item.id}`)}
                     style={{marginRight: 8}}
+                    labelStyle={[FONT.MONTSERRAT_700BOLD, styleSheet.BUTTON_TEXT]}
                   >
                     Edit
                   </Button>
-                  <Button {...props} onPress={() => deleteDeck(item.id)}>
+                  <Button
+                    {...props}
+                    onPress={() => deleteDeck(item.id)}
+                    labelStyle={[FONT.MONTSERRAT_700BOLD, styleSheet.BUTTON_TEXT]}
+                  >
                     Delete
                   </Button>
                 </View>
@@ -38,7 +46,7 @@ export default function DecksScreen() {
         />
         <FAB
           icon="plus"
-          style={styles.fab}
+          style={homescreenStyles.fab}
           onPress={() => router.push('/edit-deck')}
           label="New Deck"
         />
@@ -46,20 +54,3 @@ export default function DecksScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  safeAreaContainer: {
-    flex: 1,
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-}); 
