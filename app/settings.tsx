@@ -5,7 +5,7 @@ import {Stack} from 'expo-router';
 import {useGameStore} from '../src/zustand_state_store/gameStore';
 import {MINIMUM_GAME_DURATION_SECONDS} from '../src/constants/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {styleSheet} from "@/src/constants/stylingConstants";
+import {GLOBAL_STYLES} from "@/src/constants/stylingConstants";
 
 export default function SettingsScreen() {
   const gameDuration = useGameStore((state) => state.gameDuration);
@@ -27,14 +27,14 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={styleSheet.SAFE_AREA_CONTAINER} edges={['top']}>
+    <SafeAreaView style={GLOBAL_STYLES.SAFE_AREA_CONTAINER} edges={['top']}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={[styleSheet.BACKGROUND_CONTAINER, settingsStyles.container]}>
+        <View style={[GLOBAL_STYLES.BACKGROUND_CONTAINER, settingsStyles.container]}>
           <Stack.Screen options={{title: 'Game Settings'}}/>
 
           {/* Game Duration Section */}
           <View style={settingsStyles.section}>
-            <Text variant="titleMedium" style={[styleSheet.TITLE, settingsStyles.sectionTitle]}>
+            <Text variant="titleMedium" style={[GLOBAL_STYLES.TITLE, settingsStyles.sectionTitle]}>
               Game Duration
             </Text>
             <TextInput
@@ -48,18 +48,18 @@ export default function SettingsScreen() {
                 parseInt(durationInput, 10) < MINIMUM_GAME_DURATION_SECONDS
               }
             />
-            <Text variant="bodySmall" style={[styleSheet.BODY]}>
+            <Text variant="bodySmall" style={[GLOBAL_STYLES.BODY]}>
               Enter the number of seconds for each round (minimum: {MINIMUM_GAME_DURATION_SECONDS}s)
             </Text>
           </View>
 
           {/* Audio Mute Section */}
           <View style={settingsStyles.section}>
-            <Text variant="titleMedium" style={[styleSheet.TITLE, settingsStyles.sectionTitle]}>
+            <Text variant="titleMedium" style={[GLOBAL_STYLES.TITLE, settingsStyles.sectionTitle]}>
               Mute Game Audio
             </Text>
             <View style={settingsStyles.toggleContainer}>
-              <Text style={[styleSheet.CAPTION, settingsStyles.toggleLabel]}>
+              <Text style={[GLOBAL_STYLES.CAPTION, settingsStyles.toggleLabel]}>
                 {isMuted ? 'Muted' : 'Unmuted'}
               </Text>
               <Switch

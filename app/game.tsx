@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {AUDIO_CONFIG, DEFAULT_READY_TEXT,} from '@/src/constants/constants';
-import {FONT, PURPLE, styleSheet} from '@/src/constants/stylingConstants';
+import {FONT, GLOBAL_STYLES, PURPLE} from '@/src/constants/stylingConstants';
 
 
 // todo move this to constants file
@@ -163,17 +163,17 @@ export default function GameScreen() {
       <Stack.Screen options={{ title: 'Play' }} />
       {showCountdown ? (
         <View style={styles.countdownContainer}>
-          <Text variant="displayLarge" style={[styles.countdown, styleSheet.GAME_TEXT]}>{countdownTime}</Text>
+          <Text variant="displayLarge" style={[styles.countdown, GLOBAL_STYLES.GAME_TEXT]}>{countdownTime}</Text>
         </View>
       ) : (
         <>
-          <Text variant="headlineMedium" style={[styles.gameTimer, styleSheet.GAME_TEXT]}>
+          <Text variant="headlineMedium" style={[styles.gameTimer, GLOBAL_STYLES.GAME_TEXT]}>
             {gameTimeLeft}s
           </Text>
-          <Text variant="headlineLarge" style={[styles.word, styleSheet.GAME_TEXT]}>
+          <Text variant="headlineLarge" style={[styles.word, GLOBAL_STYLES.GAME_TEXT]}>
             {currentWord?.text || DEFAULT_READY_TEXT}
           </Text>
-          <Text variant="titleLarge" style={[styles.score, styleSheet.GAME_TEXT]}>
+          <Text variant="titleLarge" style={[styles.score, GLOBAL_STYLES.GAME_TEXT]}>
             Score: {score}
           </Text>
           <Button

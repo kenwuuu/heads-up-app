@@ -6,7 +6,7 @@ import {Deck} from '@/decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {APP_NAME, GRID_COLUMN_COUNT, GRID_SPACING, GRID_SPACING_MULTIPLIER} from '@/src/constants/constants';
 import {handleStartGame} from "@/app/gameUtils";
-import {FONT, NAVY, PURPLE, styleSheet, YELLOW} from "@/src/constants/stylingConstants";
+import {FONT, GLOBAL_STYLES, NAVY, PURPLE, YELLOW} from "@/src/constants/stylingConstants";
 import {
   Montserrat_100Thin,
   Montserrat_100Thin_Italic,
@@ -67,13 +67,13 @@ export default function HomeScreen() {
       onPress={() => setSelectedDeck(deck)}
     >
       <Card.Content style={styles.cardContent}>
-        <Text style={[styleSheet.TITLE, styles.cardTitleSize]}>
+        <Text style={[GLOBAL_STYLES.TITLE, styles.cardTitleSize]}>
           {deck.title}
         </Text>
-        <Text style={styleSheet.CAPTION}>
+        <Text style={GLOBAL_STYLES.CAPTION}>
           {deck.words.length} words
         </Text>
-        <Text variant="bodySmall" numberOfLines={2} style={[styleSheet.BODY, styles.cardBodyMargin]}>
+        <Text variant="bodySmall" numberOfLines={2} style={[GLOBAL_STYLES.BODY, styles.cardBodyMargin]}>
           {deck.description}
         </Text>
       </Card.Content>
@@ -81,8 +81,8 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView style={styleSheet.SAFE_AREA_CONTAINER} edges={['top']}>
-      <View style={styleSheet.BACKGROUND_CONTAINER}>
+    <SafeAreaView style={GLOBAL_STYLES.SAFE_AREA_CONTAINER} edges={['top']}>
+      <View style={GLOBAL_STYLES.BACKGROUND_CONTAINER}>
         <FlatList
           data={decks}
           renderItem={renderDeckCard}
@@ -121,7 +121,7 @@ export const styles = StyleSheet.create({
     paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
     fontSize: 48,
     ...FONT.MONTSERRAT_800EXTRABOLD,
-    ...styleSheet.GAME_TEXT
+    ...GLOBAL_STYLES.GAME_TEXT
   },
   grid: {
     paddingBottom: 80, // Add padding for FAB

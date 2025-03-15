@@ -46,7 +46,7 @@ export const FONT = StyleSheet.create({
 })
 
 // Stylesheets: Global
-export const styleSheet = StyleSheet.create({
+export const GLOBAL_STYLES = StyleSheet.create({
   BACKGROUND_CONTAINER: {
     flex: 1,
     backgroundColor: NAVY,

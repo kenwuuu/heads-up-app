@@ -3,15 +3,15 @@ import {Button, FAB, Icon, List} from 'react-native-paper';
 import {router, Stack} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {SafeAreaView} from "react-native-safe-area-context";
-import {FONT, styleSheet} from "@/src/constants/stylingConstants";
+import {FONT, GLOBAL_STYLES} from "@/src/constants/stylingConstants";
 
 export default function DecksScreen() {
   const decks = useDeckStore((state) => state.decks);
   const deleteDeck = useDeckStore((state) => state.deleteDeck);
 
   return (
-    <SafeAreaView style={styleSheet.SAFE_AREA_CONTAINER} edges={['top']}>
-      <View style={styleSheet.BACKGROUND_CONTAINER}>
+    <SafeAreaView style={GLOBAL_STYLES.SAFE_AREA_CONTAINER} edges={['top']}>
+      <View style={GLOBAL_STYLES.BACKGROUND_CONTAINER}>
         <Stack.Screen options={{title: 'Manage Decks'}}/>
         <FlatList
           data={decks}
@@ -19,9 +19,9 @@ export default function DecksScreen() {
           renderItem={({item}) => (
             <List.Item
               title={item.title}
-              titleStyle={[styleSheet.TITLE, styles.deckTitleSize]}
+              titleStyle={[GLOBAL_STYLES.TITLE, styles.deckTitleSize]}
               description={`${item.words.length} words • ${item.description}`}
-              descriptionStyle={styleSheet.BODY}
+              descriptionStyle={GLOBAL_STYLES.BODY}
               right={(props) => (
                 <View style={{flexDirection: 'row', marginRight: -10, alignItems: 'center'}}>
                   <Button
@@ -31,7 +31,7 @@ export default function DecksScreen() {
                     )}
                     onPress={() => router.push(`/edit-deck?deckId=${item.id}`)}
                     style={{marginRight: 0}}
-                    labelStyle={[FONT.MONTSERRAT_700BOLD, styleSheet.BUTTON_TEXT]}
+                    labelStyle={[FONT.MONTSERRAT_700BOLD, GLOBAL_STYLES.BUTTON_TEXT]}
                   >
                     {''}
                   </Button>
@@ -41,7 +41,7 @@ export default function DecksScreen() {
                       <Icon source="trash-can" size={size * 1.5} color={color}/>
                     )}
                     onPress={() => deleteDeck(item.id)}
-                    labelStyle={[FONT.MONTSERRAT_700BOLD, styleSheet.BUTTON_TEXT]}
+                    labelStyle={[FONT.MONTSERRAT_700BOLD, GLOBAL_STYLES.BUTTON_TEXT]}
                     style={{marginRight: 0}}
                   >
                     {''}
