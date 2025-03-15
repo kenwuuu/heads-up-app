@@ -1,9 +1,9 @@
-import {FlatList, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, FAB, Icon, List} from 'react-native-paper';
 import {router, Stack} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {SafeAreaView} from "react-native-safe-area-context";
-import {editDeckMenuStyles, FONT, homescreenStyles, styleSheet} from "@/src/constants/stylingConstants";
+import {FONT, styleSheet} from "@/src/constants/stylingConstants";
 
 export default function DecksScreen() {
   const decks = useDeckStore((state) => state.decks);
@@ -19,7 +19,7 @@ export default function DecksScreen() {
           renderItem={({item}) => (
             <List.Item
               title={item.title}
-              titleStyle={[styleSheet.TITLE, editDeckMenuStyles.deckTitleSize]}
+              titleStyle={[styleSheet.TITLE, styles.deckTitleSize]}
               description={`${item.words.length} words • ${item.description}`}
               descriptionStyle={styleSheet.BODY}
               right={(props) => (
@@ -53,7 +53,7 @@ export default function DecksScreen() {
         />
         <FAB
           icon="plus"
-          style={homescreenStyles.fab}
+          style={styles.fab}
           onPress={() => router.push('/edit-deck')}
           label="New Deck"
         />
@@ -61,3 +61,15 @@ export default function DecksScreen() {
     </SafeAreaView>
   );
 }
+
+export const styles = StyleSheet.create({
+  deckTitleSize: {
+    fontSize: 18,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    alignSelf: 'center',
+    bottom: 0,
+  },
+});

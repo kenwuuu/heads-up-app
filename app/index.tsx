@@ -1,12 +1,12 @@
-import {Dimensions, FlatList, View} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {Card, FAB, Text} from 'react-native-paper';
 import {useDeckStore} from '@/src/zustand_state_store/deckStore';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {Deck} from '@/decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {APP_NAME, GRID_COLUMN_COUNT, GRID_SPACING} from '@/src/constants/constants';
+import {APP_NAME, GRID_COLUMN_COUNT, GRID_SPACING, GRID_SPACING_MULTIPLIER} from '@/src/constants/constants';
 import {handleStartGame} from "@/app/gameUtils";
-import {homescreenStyles, styleSheet} from "@/src/constants/stylingConstants";
+import {FONT, NAVY, PURPLE, styleSheet, YELLOW} from "@/src/constants/stylingConstants";
 import {
   Montserrat_100Thin,
   Montserrat_100Thin_Italic,
@@ -61,19 +61,19 @@ export default function HomeScreen() {
   const renderDeckCard = ({ item: deck }: { item: Deck }) => (
     <Card
       style={[
-        homescreenStyles.card,
-        selectedDeck?.id === deck.id && homescreenStyles.selectedCard,
+        styles.card,
+        selectedDeck?.id === deck.id && styles.selectedCard,
       ]}
       onPress={() => setSelectedDeck(deck)}
     >
-      <Card.Content style={homescreenStyles.cardContent}>
-        <Text style={[styleSheet.TITLE, homescreenStyles.cardTitleSize]}>
+      <Card.Content style={styles.cardContent}>
+        <Text style={[styleSheet.TITLE, styles.cardTitleSize]}>
           {deck.title}
         </Text>
         <Text style={styleSheet.CAPTION}>
           {deck.words.length} words
         </Text>
-        <Text variant="bodySmall" numberOfLines={2} style={[styleSheet.BODY, homescreenStyles.cardBodyMargin]}>
+        <Text variant="bodySmall" numberOfLines={2} style={[styleSheet.BODY, styles.cardBodyMargin]}>
           {deck.description}
         </Text>
       </Card.Content>
@@ -88,17 +88,17 @@ export default function HomeScreen() {
           renderItem={renderDeckCard}
           keyExtractor={(item) => item.id}
           numColumns={GRID_COLUMN_COUNT}
-          columnWrapperStyle={homescreenStyles.row}
-          contentContainerStyle={homescreenStyles.grid}
-          style={homescreenStyles.flatList}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.grid}
+          style={styles.flatList}
           ListHeaderComponent={
-            <Text variant="headlineLarge" style={homescreenStyles.appTitle}>
+            <Text variant="headlineLarge" style={styles.appTitle}>
               {APP_NAME}
             </Text>
           }
         />
         <FAB
-          style={homescreenStyles.fab}
+          style={styles.fab}
           onPress={() => {
             handleStartGame(selectedDeck, startGame)
           }}
@@ -110,3 +110,53 @@ export default function HomeScreen() {
   );
 }
 
+// Stylesheets: Home Screen - index.tsx
+export const styles = StyleSheet.create({
+  flatList: {
+    paddingHorizontal: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+  },
+  appTitle: {
+    textAlign: 'center',
+    marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+    paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.MEDIUM,
+    fontSize: 48,
+    ...FONT.MONTSERRAT_800EXTRABOLD,
+    ...styleSheet.GAME_TEXT
+  },
+  grid: {
+    paddingBottom: 80, // Add padding for FAB
+    paddingTop: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+  },
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: GRID_SPACING * GRID_SPACING_MULTIPLIER.SMALL,
+  },
+  card: {
+    width: cardWidth,
+    marginHorizontal: 0,
+    backgroundColor: NAVY,
+    borderColor: PURPLE,
+    borderWidth: 1.5,
+  },
+  cardContent: {
+    paddingVertical: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  selectedCard: {
+    borderColor: YELLOW,
+    borderWidth: 1.5,
+  },
+  cardTitleSize: {
+    fontSize: 20,
+  },
+  cardBodyMargin: {
+    marginTop: 14,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    alignSelf: 'center',
+    bottom: 0,
+  },
+});

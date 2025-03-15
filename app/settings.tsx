@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {Keyboard, Switch, TouchableWithoutFeedback, View,} from 'react-native';
+import {Keyboard, StyleSheet, Switch, TouchableWithoutFeedback, View,} from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import {Stack} from 'expo-router';
 import {useGameStore} from '../src/zustand_state_store/gameStore';
 import {MINIMUM_GAME_DURATION_SECONDS} from '../src/constants/constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {settingsStyles, styleSheet} from "@/src/constants/stylingConstants";
+import {styleSheet} from "@/src/constants/stylingConstants";
 
 export default function SettingsScreen() {
   const gameDuration = useGameStore((state) => state.gameDuration);
@@ -74,3 +74,29 @@ export default function SettingsScreen() {
   );
 }
 
+// Stylesheets: Settings - settings.tsx
+export const settingsStyles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  safeAreaContainer: {
+    flex: 1,
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    marginBottom: 16,
+  },
+  input: {
+    marginBottom: 8,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  toggleLabel: {
+    fontSize: 16,
+  },
+});

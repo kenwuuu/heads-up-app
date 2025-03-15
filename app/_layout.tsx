@@ -2,7 +2,7 @@ import {Tabs, useRootNavigationState} from 'expo-router';
 import {IconButton, PaperProvider} from 'react-native-paper';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {useEffect} from 'react';
-import {HIDE_TAB_BAR, PURPLE, TAB_BAR, YELLOW} from "@/src/constants/stylingConstants";
+import {NAVY, PURPLE, YELLOW} from "@/src/constants/stylingConstants";
 
 export default function RootLayout() {
   const routeState = useRootNavigationState();
@@ -86,3 +86,11 @@ export default function RootLayout() {
     </PaperProvider>
   );
 }
+
+export const HIDE_TAB_BAR = {
+  display: 'none'
+};
+export const TAB_BAR = {
+  backgroundColor: NAVY,
+  borderTopWidth: 0,
+};

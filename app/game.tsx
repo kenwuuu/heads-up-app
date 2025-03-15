@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
 import {Audio} from 'expo-av';
@@ -7,9 +7,10 @@ import * as Haptics from 'expo-haptics';
 import {DeviceMotion} from 'expo-sensors';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {AUDIO_CONFIG, DEFAULT_READY_TEXT,} from '@/src/constants/constants';
-import {gameStyles, styleSheet} from '@/src/constants/stylingConstants';
+import {FONT, PURPLE, styleSheet} from '@/src/constants/stylingConstants';
 
 
+// todo move this to constants file
 // Constants for tilt detection
 const BETA_TILT_THRESHOLD = 10; // degrees
 const GAMMA_TILT_THRESHOLD = 40; // degrees
@@ -158,21 +159,21 @@ export default function GameScreen() {
   };
 
   return (
-    <View style={gameStyles.container}>
+    <View style={styles.container}>
       <Stack.Screen options={{ title: 'Play' }} />
       {showCountdown ? (
-        <View style={gameStyles.countdownContainer}>
-          <Text variant="displayLarge" style={[gameStyles.countdown, styleSheet.GAME_TEXT]}>{countdownTime}</Text>
+        <View style={styles.countdownContainer}>
+          <Text variant="displayLarge" style={[styles.countdown, styleSheet.GAME_TEXT]}>{countdownTime}</Text>
         </View>
       ) : (
         <>
-          <Text variant="headlineMedium" style={[gameStyles.gameTimer, styleSheet.GAME_TEXT]}>
+          <Text variant="headlineMedium" style={[styles.gameTimer, styleSheet.GAME_TEXT]}>
             {gameTimeLeft}s
           </Text>
-          <Text variant="headlineLarge" style={[gameStyles.word, styleSheet.GAME_TEXT]}>
+          <Text variant="headlineLarge" style={[styles.word, styleSheet.GAME_TEXT]}>
             {currentWord?.text || DEFAULT_READY_TEXT}
           </Text>
-          <Text variant="titleLarge" style={[gameStyles.score, styleSheet.GAME_TEXT]}>
+          <Text variant="titleLarge" style={[styles.score, styleSheet.GAME_TEXT]}>
             Score: {score}
           </Text>
           <Button
@@ -182,7 +183,7 @@ export default function GameScreen() {
               endGame();
               router.navigate('/');
             }}
-            style={gameStyles.homeButton}
+            style={styles.homeButton}
           >
             Home
           </Button>
@@ -191,3 +192,60 @@ export default function GameScreen() {
     </View>
   );
 }
+
+// Stylesheets: Game - game.tsx
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    backgroundColor: PURPLE,
+  },
+  countdownContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  countdown: {
+    paddingTop: 140,
+    fontSize: 180,
+    ...FONT.MONTSERRAT_800EXTRABOLD,
+  },
+  homeButton: {
+    alignSelf: 'center',
+    marginBottom: 20,
+    borderRadius: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    ...FONT.MONTSERRAT_700BOLD,
+  },
+  gameTimer: {
+    paddingTop: 36,
+    fontSize: 48,
+    ...FONT.MONTSERRAT_500MEDIUM
+  },
+  wordCard: {
+    padding: 40,
+    width: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+  },
+  word: {
+    paddingTop: 80,
+    textAlign: 'center',
+    fontSize: 100,
+    ...FONT.MONTSERRAT_900BLACK,
+  },
+  score: {
+    fontSize: 22,
+    ...FONT.MONTSERRAT_800EXTRABOLD,
+  },
+});
