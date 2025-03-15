@@ -1,5 +1,5 @@
 import {FlatList, View} from 'react-native';
-import {Button, FAB, List} from 'react-native-paper';
+import {Button, FAB, Icon, List} from 'react-native-paper';
 import {router, Stack} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {SafeAreaView} from "react-native-safe-area-context";
@@ -23,21 +23,28 @@ export default function DecksScreen() {
               description={`${item.words.length} words • ${item.description}`}
               descriptionStyle={styleSheet.BODY}
               right={(props) => (
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', marginRight: -10, alignItems: 'center'}}>
                   <Button
                     {...props}
+                    icon={({size, color}) => (
+                      <Icon source="playlist-edit" size={size * 1.5} color={color}/>
+                    )}
                     onPress={() => router.push(`/edit-deck?deckId=${item.id}`)}
-                    style={{marginRight: 8}}
+                    style={{marginRight: 0}}
                     labelStyle={[FONT.MONTSERRAT_700BOLD, styleSheet.BUTTON_TEXT]}
                   >
-                    Edit
+                    {''}
                   </Button>
                   <Button
                     {...props}
+                    icon={({size, color}) => (
+                      <Icon source="trash-can" size={size * 1.5} color={color}/>
+                    )}
                     onPress={() => deleteDeck(item.id)}
                     labelStyle={[FONT.MONTSERRAT_700BOLD, styleSheet.BUTTON_TEXT]}
+                    style={{marginRight: 0}}
                   >
-                    Delete
+                    {''}
                   </Button>
                 </View>
               )}
