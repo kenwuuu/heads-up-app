@@ -1,20 +1,17 @@
-import {useCallback, useRef, useState} from 'react';
-import {KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View} from 'react-native';
+import {useCallback, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {router, useLocalSearchParams} from 'expo-router';
 import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {Deck, Word} from '../decks/decks';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import {useFocusEffect} from '@react-navigation/native';
-import {GLOBAL_STYLES} from "@/src/constants/stylingConstants";
 
 export default function EditDeckScreen() {
-  const { deckId } = useLocalSearchParams<{ deckId: string }>();
+  const {deckId} = useLocalSearchParams<{ deckId: string }>();
   const decks = useDeckStore((state) => state.decks);
   const addDeck = useDeckStore((state) => state.addDeck);
   const updateDeck = useDeckStore((state) => state.updateDeck);
-  const scrollViewRef = useRef<ScrollView>(null);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -34,7 +31,14 @@ export default function EditDeckScreen() {
         setDescription('');
         setWords([]);
       }
-    }, [deckId, decks]) // Re-run when deckId or decks change
+
+      // Cleanup function
+      return () => {
+        setTitle('');
+        setDescription('');
+        setWords([]);
+      };
+    }, [deckId, decks])
   );
 
   const handleSave = () => {
@@ -71,18 +75,23 @@ export default function EditDeckScreen() {
   };
 
   return (
-    <SafeAreaView style={GLOBAL_STYLES.SAFE_AREA_CONTAINER} edges={['top']}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-      >
-        <ScrollView
-          ref={scrollViewRef}
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}
-          keyboardShouldPersistTaps="handled"
-        >
+    <FlatList
+      data={words}
+      keyExtractor={(item) => item.id}
+      renderItem={({item}) => (
+        <View style={styles.wordItem}>
+          <Text variant="bodyLarge">{item.text}</Text>
+          <IconButton
+            icon="delete"
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              removeWord(item.id);
+            }}
+          />
+        </View>
+      )}
+      ListHeaderComponent={
+        <>
           <Text variant="titleMedium" style={styles.sectionTitle}>
             Deck Info
           </Text>
@@ -125,21 +134,9 @@ export default function EditDeckScreen() {
           <Text variant="titleMedium" style={styles.sectionTitle}>
             Words
           </Text>
-
-          {words.map((word) => (
-            <View key={word.id} style={styles.wordItem}>
-              <Text variant="bodyLarge">{word.text}</Text>
-              <IconButton
-                icon="delete"
-                onPress={() => {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                  removeWord(word.id);
-                }}
-              />
-            </View>
-          ))}
-        </ScrollView>
-
+        </>
+      }
+      ListFooterComponent={
         <View style={styles.buttonContainer}>
           <Button
             mode="contained"
@@ -161,8 +158,10 @@ export default function EditDeckScreen() {
             Cancel
           </Button>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      }
+      contentContainerStyle={styles.scrollViewContent}
+    />
+
   );
 }
 
