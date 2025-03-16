@@ -57,10 +57,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    marginBottom: 20,
+    marginBottom: 16,
     fontSize: 36,
   },
   score: {
+    paddingTop: 16,
     marginBottom: 40,
     fontSize: 48,
   },
