@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import {router, Stack, useFocusEffect} from 'expo-router';
@@ -39,7 +39,7 @@ export default function GameScreen() {
 
   const MUTE = useGameStore((state) => state.isMuted);
 
-  const [lastActionTime, setLastActionTime] = useState(0);
+  const lastActionTime = useRef(0);
 
   // load sounds. there has got to be a better way to do this lol
   const tickSoundObject = new Audio.Sound();
@@ -73,7 +73,7 @@ export default function GameScreen() {
 
         // handle debounce
         const now = Date.now();
-        if (now - lastActionTime < DEBOUNCE_TIME) return;
+        if (now - lastActionTime.current < DEBOUNCE_TIME) return;
 
         function isValidDownTilt() { // if statement helper function
           return !showCountdown &&
@@ -92,10 +92,10 @@ export default function GameScreen() {
         // Check for tilt thresholds
         if (isValidUpTilt()) {
           handleAnswer(true, correctAnswerSoundObject, incorrectAnswerSoundObject);
-          setLastActionTime(now);
+          lastActionTime.current = now;
         } else if (isValidDownTilt()) {
           handleAnswer(false, correctAnswerSoundObject, incorrectAnswerSoundObject);
-          setLastActionTime(now);
+          lastActionTime.current = now;
         }
       });
 
@@ -128,7 +128,7 @@ export default function GameScreen() {
     }
   }, [gameTimeLeft, isPlaying, showCountdown, score]);
 
-  // Countdown effect
+  // pre-game countdown effect
   useEffect(() => {
     if (showCountdown && countdownTime > 0) {
       const countdownTimer = setInterval(() => {
