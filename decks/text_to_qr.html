@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+      <html>
+      <head>
+      <title>QR Code Encoder/Decoder</title>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <script src="https://unpkg.com/qr-scanner"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    #qrcode {
+      margin-top: 20px;
+    }
+    #decoder-input {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<h1>QR Code Encoder/Decoder</h1>
+
+<h2>Encode Text to QR Code</h2>
+<textarea id="textInput" placeholder="Enter text to encode" rows="4" cols="50"></textarea><br>
+<button onclick="encodeQRCode()">Generate QR Code</button>
+<div id="qrcode"></div>
+
+<h2>Decode QR Code from Image</h2>
+<input type="file" id="decoder-input" accept="image/*">
+<button onclick="document.getElementById('decoder-input').click()">Select QR Code Image</button>
+<div id="decodedText"></div>
+
+<script>
+  function encodeQRCode() {
+    var text = document.getElementById("textInput").value;
+    var qrcodeDiv = document.getElementById("qrcode");
+    qrcodeDiv.innerHTML = ""; // Clear previous QR code
+
+    if (text) {
+      var qrcode = new QRCode(qrcodeDiv, {
+        text: text,
+        width: 256,
+        height: 256,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+  }
+
+  document.getElementById('decoder-input').addEventListener('change', event => {
+    const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    QrScanner.scanImage(file, { returnDetailedScanResult: true })
+            .then(result => {
+              document.getElementById('decodedText').innerHTML = 'Decoded Text: ' + result.data;
+            })
+            .catch(error => {
+              document.getElementById('decodedText').innerHTML = 'Error decoding QR code: ' + error;
+            });
+  });
+
+</script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
