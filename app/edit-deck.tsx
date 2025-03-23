@@ -39,6 +39,7 @@ export default function EditDeckScreen() {
         setTitle('');
         setDescription('');
         setWords([]);
+        setNewWord('');
       };
     }, [deckId, decks])
   );
@@ -87,7 +88,7 @@ export default function EditDeckScreen() {
               <Text variant="bodyLarge" style={GLOBAL_STYLES.BODY}>{item.text}</Text>
               <IconButton
                 icon="delete"
-                iconColor={PURPLE}
+                iconColor={YELLOW}
                 onPress={() => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                   removeWord(item.id);
@@ -105,17 +106,17 @@ export default function EditDeckScreen() {
                 label="Deck Title"
                 value={title}
                 onChangeText={setTitle}
-                style={styles.input}
-                textColor={PURPLE}
-                theme={{colors: {primary: PURPLE, onSurfaceVariant: PURPLE}}}
+                style={[styles.wordInput]}
+                textColor={'#ffffff'}
+                theme={{colors: {primary: '#ffffff', onSurfaceVariant: '#ffffff'}}}
               />
               <TextInput
                 label="Description"
                 value={description}
                 onChangeText={setDescription}
-                style={styles.input}
-                textColor={PURPLE}
-                theme={{colors: {primary: PURPLE, onSurfaceVariant: PURPLE}}}
+                style={styles.wordInput}
+                textColor={'#ffffff'}
+                theme={{colors: {primary: '#ffffff', onSurfaceVariant: '#ffffff'}}}
               />
 
               <Text variant="titleMedium" style={[GLOBAL_STYLES.TITLE, styles.sectionTitle]}>
@@ -128,8 +129,8 @@ export default function EditDeckScreen() {
                   value={newWord}
                   onChangeText={setNewWord}
                   style={styles.wordInput}
-                  textColor={PURPLE}
-                  theme={{colors: {primary: PURPLE, onSurfaceVariant: PURPLE}}}
+                  textColor={'#ffffff'}
+                  theme={{colors: {primary: '#ffffff', onSurfaceVariant: '#ffffff'}}}
                 />
                 <Button
                   onPress={() => {
@@ -194,6 +195,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   sectionTitle: {
+    marginTop: 16,
     marginBottom: 16,
   },
   wordItem: {
@@ -209,12 +211,13 @@ export const styles = StyleSheet.create({
   addWordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
     gap: 8,
   },
   wordInput: {
+    paddingBottom: 0,
+    marginBottom: 16,
     flex: 1,
-    backgroundColor: 'white',
+    ...GLOBAL_STYLES.TEXT_INPUT,
   },
   buttonContainer: {
     padding: 16,

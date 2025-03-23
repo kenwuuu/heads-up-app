@@ -50,6 +50,9 @@ export const COLORS = {
   PRIMARY_TEXT: {
     color: YELLOW
   },
+  SECONDARY_TEXT: {
+    color: PURPLE
+  },
 
   PRIMARY: {
     color: NAVY
@@ -74,6 +77,11 @@ export const GLOBAL_STYLES = StyleSheet.create({
   },
   CONTAINER: {
     backgroundColor: NAVY,
+    borderColor: PURPLE,
+    borderWidth: 1.5,
+  },
+  TEXT_INPUT: {
+    backgroundColor: '#1d3773',
     borderColor: PURPLE,
     borderWidth: 1.5,
   },

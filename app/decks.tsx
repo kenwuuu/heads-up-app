@@ -38,7 +38,7 @@ export default function DecksScreen() {
                   <Button
                     {...props}
                     icon={({size, color}) => (
-                      <Icon source="trash-can" size={size * 1.5} color={color}/>
+                      <Icon source="delete" size={size * 1.5} color={color}/>
                     )}
                     onPress={() => deleteDeck(item.id)}
                     labelStyle={[FONT.MONTSERRAT_700BOLD, GLOBAL_STYLES.BUTTON_TEXT]}

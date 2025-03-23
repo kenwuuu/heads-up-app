@@ -42,7 +42,9 @@ export default function SettingsScreen() {
               value={durationInput}
               onChangeText={handleDurationChange}
               keyboardType="number-pad"
-              style={settingsStyles.input}
+              style={[settingsStyles.input]}
+              textColor={'#ffffff'}
+              theme={{colors: {primary: '#ffffff', onSurfaceVariant: '#ffffff'}}}
               error={
                 isNaN(parseInt(durationInput, 10)) ||
                 parseInt(durationInput, 10) < MINIMUM_GAME_DURATION_SECONDS
@@ -90,6 +92,7 @@ export const settingsStyles = StyleSheet.create({
   },
   input: {
     marginBottom: 8,
+    ...GLOBAL_STYLES.TEXT_INPUT
   },
   toggleContainer: {
     flexDirection: 'row',
