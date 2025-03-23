@@ -6,7 +6,7 @@ import {Deck} from '@/decks/decks';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {APP_NAME, GRID_COLUMN_COUNT, GRID_SPACING, GRID_SPACING_MULTIPLIER} from '@/src/constants/constants';
 import {handleStartGame} from "@/app/gameUtils";
-import {COLORS, FONT, GLOBAL_STYLES, PURPLE, YELLOW} from "@/src/constants/stylingConstants";
+import {FONT, GLOBAL_STYLES, YELLOW} from "@/src/constants/stylingConstants";
 import {
   Montserrat_100Thin,
   Montserrat_100Thin_Italic,
@@ -58,7 +58,7 @@ export default function HomeScreen() {
     Montserrat_900Black_Italic,
   });
 
-  const renderDeckCard = ({ item: deck }: { item: Deck }) => (
+  const renderDeckCard = ({item: deck}: { item: Deck }) => (
     <Card
       style={[
         styles.card,
@@ -134,9 +134,7 @@ export const styles = StyleSheet.create({
   card: {
     width: cardWidth,
     marginHorizontal: 0,
-    backgroundColor: COLORS.SURFACE.backgroundColor,
-    borderColor: PURPLE,
-    borderWidth: 1.5,
+    ...GLOBAL_STYLES.CONTAINER,
   },
   cardContent: {
     paddingVertical: 10,

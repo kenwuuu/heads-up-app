@@ -47,9 +47,13 @@ export const FONT = StyleSheet.create({
 
 // Stylesheets: Colors
 export const COLORS = {
-  SURFACE: {
-    backgroundColor: NAVY
+  PRIMARY_TEXT: {
+    color: YELLOW
   },
+  SECONDARY_TEXT: {
+    color: PURPLE
+  },
+
   PRIMARY: {
     color: NAVY
   },
@@ -65,11 +69,21 @@ export const COLORS = {
 export const GLOBAL_STYLES = StyleSheet.create({
   BACKGROUND_CONTAINER: {
     flex: 1,
-    ...COLORS.SURFACE,
+    backgroundColor: NAVY,
   },
   SAFE_AREA_CONTAINER: {
     flex: 1,
     backgroundColor: NAVY,
+  },
+  CONTAINER: {
+    backgroundColor: NAVY,
+    borderColor: PURPLE,
+    borderWidth: 1.5,
+  },
+  TEXT_INPUT: {
+    backgroundColor: '#1d3773',
+    borderColor: PURPLE,
+    borderWidth: 1.5,
   },
   GAME_TEXT: {
     color: YELLOW,
