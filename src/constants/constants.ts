@@ -28,16 +28,6 @@ export const SELECTED_CARD_COLORS = {
   BORDER_WIDTH: 1,
 };
 
-// Button colors
-export const BUTTON_COLORS = {
-  CORRECT: '#4CAF50',
-  INCORRECT: '#f44336',
-};
-
-// Layout dimensions
-export const MAX_BUTTON_CONTAINER_WIDTH = 300;
-
-
 // Audio constants
 export const AUDIO_CONFIG = {
   PLAYS_IN_SILENT_MODE_IOS: true,

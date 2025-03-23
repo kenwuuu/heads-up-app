@@ -3,6 +3,8 @@ import {Button, Text} from 'react-native-paper';
 import {router, Stack, useLocalSearchParams} from 'expo-router';
 import {useGameStore} from '@/src/zustand_state_store/gameStore';
 import {handleStartGame} from "@/app/gameUtils";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {FONT, GLOBAL_STYLES, PURPLE, YELLOW} from "@/src/constants/stylingConstants";
 
 export default function ResultsScreen() {
   const { score } = useLocalSearchParams<{ score: string }>();
@@ -10,33 +12,40 @@ export default function ResultsScreen() {
   const { selectedDeck, startGame } = useGameStore();
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Round Results' }} />
-      <Text variant="headlineLarge" style={styles.title}>
-        Round Complete!
-      </Text>
-      <Text variant="displaySmall" style={styles.score}>
-        {scoreNumber} Points
-      </Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="contained"
-          onPress={() => {
-            handleStartGame(selectedDeck, startGame);
-          }}
-          style={styles.button}
-        >
-          Play Again
-        </Button>
-        <Button
-          mode="outlined"
-          onPress={() => router.replace('/')}
-          style={styles.button}
-        >
-          Main Menu
-        </Button>
+    <SafeAreaView style={GLOBAL_STYLES.SAFE_AREA_CONTAINER} edges={['top']}>
+      <View style={[GLOBAL_STYLES.BACKGROUND_CONTAINER, styles.container]}>
+        <Stack.Screen options={{ title: 'Round Results' }} />
+        <Text variant="headlineLarge" style={[styles.title, GLOBAL_STYLES.GAME_TEXT, FONT.MONTSERRAT_800EXTRABOLD]}>
+          Round Complete!
+        </Text>
+        <Text variant="displaySmall" style={[styles.score, GLOBAL_STYLES.GAME_TEXT, FONT.MONTSERRAT_900BLACK]}>
+          {scoreNumber} Points
+        </Text>
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            onPress={() => {
+              handleStartGame(selectedDeck, startGame);
+            }}
+            style={styles.button}
+            buttonColor={PURPLE}
+            textColor={YELLOW}
+            labelStyle={[FONT.MONTSERRAT_800EXTRABOLD, {fontSize: 18}]}
+          >
+            Play Again
+          </Button>
+          <Button
+            mode="outlined"
+            onPress={() => router.replace('/')}
+            style={styles.button}
+            textColor={PURPLE}
+            labelStyle={[FONT.MONTSERRAT_800EXTRABOLD, {fontSize: 18}]}
+          >
+            Main Menu
+          </Button>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -46,21 +55,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-  },
-  safeAreaContainer: {
-    flex: 1,
   },
   title: {
-    marginBottom: 20,
+    marginBottom: 16,
+    fontSize: 36,
   },
   score: {
+    paddingTop: 16,
     marginBottom: 40,
+    fontSize: 48,
   },
   buttonContainer: {
     width: '100%',
     maxWidth: 300,
+    gap: 8,
   },
   button: {
     marginVertical: 10,

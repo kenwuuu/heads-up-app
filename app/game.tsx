@@ -38,19 +38,41 @@ export default function GameScreen() {
   } = useGameStore();
 
   const MUTE = useGameStore((state) => state.isMuted);
-
   const lastActionTime = useRef(0);
 
-  // load sounds. there has got to be a better way to do this lol
-  const tickSoundObject = new Audio.Sound();
-  const correctAnswerSoundObject = new Audio.Sound();
-  const incorrectAnswerSoundObject = new Audio.Sound();
-  const tickSoundFile = require('../assets/sounds/tick.wav');
-  const correctAnswerSoundFile = require('../assets/sounds/correct.mp3');
-  const incorrectAnswerSoundFile = require('../assets/sounds/incorrect.mp3');
-  tickSoundObject.loadAsync(tickSoundFile);
-  correctAnswerSoundObject.loadAsync(correctAnswerSoundFile);
-  incorrectAnswerSoundObject.loadAsync(incorrectAnswerSoundFile);
+  // Sound references
+  const tickSoundRef = useRef(new Audio.Sound());
+  const correctAnswerSoundRef = useRef(new Audio.Sound());
+  const incorrectAnswerSoundRef = useRef(new Audio.Sound());
+
+  // Load and cleanup sounds
+  useEffect(() => {
+    const loadSounds = async () => {
+      try {
+        await tickSoundRef.current.loadAsync(require('../assets/sounds/tick.wav'));
+        await correctAnswerSoundRef.current.loadAsync(require('../assets/sounds/correct.mp3'));
+        await incorrectAnswerSoundRef.current.loadAsync(require('../assets/sounds/incorrect.mp3'));
+      } catch (error) {
+        console.error('Failed to load sounds:', error);
+      }
+    };
+
+    loadSounds();
+
+    // Cleanup function
+    return () => {
+      const unloadSounds = async () => {
+        try {
+          await tickSoundRef.current.unloadAsync();
+          await correctAnswerSoundRef.current.unloadAsync();
+          await incorrectAnswerSoundRef.current.unloadAsync();
+        } catch (error) {
+          console.error('Failed to unload sounds:', error);
+        }
+      };
+      unloadSounds();
+    };
+  }, []);
 
   // Initialize audio and motion sensors
   useFocusEffect(
@@ -91,10 +113,10 @@ export default function GameScreen() {
 
         // Check for tilt thresholds
         if (isValidUpTilt()) {
-          handleAnswer(true, correctAnswerSoundObject, incorrectAnswerSoundObject);
+          handleAnswer(true, correctAnswerSoundRef.current, incorrectAnswerSoundRef.current);
           lastActionTime.current = now;
         } else if (isValidDownTilt()) {
-          handleAnswer(false, correctAnswerSoundObject, incorrectAnswerSoundObject);
+          handleAnswer(false, correctAnswerSoundRef.current, incorrectAnswerSoundRef.current);
           lastActionTime.current = now;
         }
       });
@@ -112,7 +134,11 @@ export default function GameScreen() {
       const gameTimer = setInterval(async () => {
         if (gameTimeLeft <= 6 && gameTimeLeft >= 0) {  // tick 5, 4, 3, 2, 1, 0
           if (!MUTE) {
-            tickSoundObject.playAsync();
+            try {
+              await tickSoundRef.current.replayAsync();
+            } catch (error) {
+              console.error('Failed to play tick sound:', error);
+            }
           }
         }
 
@@ -142,18 +168,26 @@ export default function GameScreen() {
   }, [countdownTime, showCountdown]);
 
   // Handle correct/incorrect with sound and haptics
-  const handleAnswer = (isCorrect: boolean, correctSound: Audio.Sound, incorrectSound: Audio.Sound) => {
+  const handleAnswer = async (isCorrect: boolean, correctSound: Audio.Sound, incorrectSound: Audio.Sound) => {
     if (isCorrect) {
       if (!MUTE) {
-        correctSound.playAsync()
+        try {
+          await correctSound.replayAsync();
+        } catch (error) {
+          console.error('Failed to play correct sound:', error);
+        }
       }
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       markCorrect();
     } else {
       if (!MUTE) {
-        incorrectSound.playAsync()
+        try {
+          await incorrectSound.replayAsync();
+        } catch (error) {
+          console.error('Failed to play incorrect sound:', error);
+        }
       }
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       markIncorrect();
     }
   };

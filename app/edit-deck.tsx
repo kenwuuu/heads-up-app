@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, IconButton, Text, TextInput} from 'react-native-paper';
 import {router, useLocalSearchParams} from 'expo-router';
@@ -6,6 +6,8 @@ import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {Deck, Word} from '../decks/decks';
 import * as Haptics from 'expo-haptics';
 import {useFocusEffect} from '@react-navigation/native';
+import {FONT, GLOBAL_STYLES, NAVY, PURPLE, YELLOW} from "@/src/constants/stylingConstants";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export default function EditDeckScreen() {
   const {deckId} = useLocalSearchParams<{ deckId: string }>();
@@ -75,112 +77,121 @@ export default function EditDeckScreen() {
   };
 
   return (
-    <FlatList
-      data={words}
-      keyExtractor={(item) => item.id}
-      renderItem={({item}) => (
-        <View style={styles.wordItem}>
-          <Text variant="bodyLarge">{item.text}</Text>
-          <IconButton
-            icon="delete"
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              removeWord(item.id);
-            }}
-          />
-        </View>
-      )}
-      ListHeaderComponent={
-        <>
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Deck Info
-          </Text>
+    <SafeAreaView style={GLOBAL_STYLES.SAFE_AREA_CONTAINER} edges={['top']}>
+      <View style={GLOBAL_STYLES.BACKGROUND_CONTAINER}>
+        <FlatList
+          data={words}
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => (
+            <View style={styles.wordItem}>
+              <Text variant="bodyLarge" style={GLOBAL_STYLES.BODY}>{item.text}</Text>
+              <IconButton
+                icon="delete"
+                iconColor={PURPLE}
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  removeWord(item.id);
+                }}
+              />
+            </View>
+          )}
+          ListHeaderComponent={
+            <>
+              <Text variant="titleMedium" style={[GLOBAL_STYLES.TITLE, styles.sectionTitle]}>
+                Deck Info
+              </Text>
 
-          <TextInput
-            label="Deck Title"
-            value={title}
-            onChangeText={setTitle}
-            style={styles.input}
-          />
-          <TextInput
-            label="Description"
-            value={description}
-            onChangeText={setDescription}
-            style={styles.input}
-          />
+              <TextInput
+                label="Deck Title"
+                value={title}
+                onChangeText={setTitle}
+                style={styles.input}
+                textColor={PURPLE}
+                theme={{ colors: { primary: PURPLE, onSurfaceVariant: PURPLE } }}
+              />
+              <TextInput
+                label="Description"
+                value={description}
+                onChangeText={setDescription}
+                style={styles.input}
+                textColor={PURPLE}
+                theme={{ colors: { primary: PURPLE, onSurfaceVariant: PURPLE } }}
+              />
 
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Add a Word
-          </Text>
+              <Text variant="titleMedium" style={[GLOBAL_STYLES.TITLE, styles.sectionTitle]}>
+                Add a Word
+              </Text>
 
-          <View style={styles.addWordContainer}>
-            <TextInput
-              label="New Word"
-              value={newWord}
-              onChangeText={setNewWord}
-              style={styles.wordInput}
-            />
-            <Button
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                addWord();
-              }}
-              mode="contained"
-            >
-              Add
-            </Button>
-          </View>
+              <View style={styles.addWordContainer}>
+                <TextInput
+                  label="New Word"
+                  value={newWord}
+                  onChangeText={setNewWord}
+                  style={styles.wordInput}
+                  textColor={PURPLE}
+                  theme={{ colors: { primary: PURPLE, onSurfaceVariant: PURPLE } }}
+                />
+                <Button
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    addWord();
+                  }}
+                  mode="contained"
+                  buttonColor={PURPLE}
+                  textColor={YELLOW}
+                  labelStyle={FONT.MONTSERRAT_700BOLD}
+                >
+                  Add
+                </Button>
+              </View>
 
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Words
-          </Text>
-        </>
-      }
-      ListFooterComponent={
-        <View style={styles.buttonContainer}>
-          <Button
-            mode="contained"
-            onPress={() => {
-              handleSave();
-            }}
-            style={styles.button}
-            disabled={!title.trim() || words.length === 0}
-          >
-            Save Deck
-          </Button>
-          <Button
-            mode="outlined"
-            onPress={() => {
-              router.push('/decks');
-            }}
-            style={styles.button}
-          >
-            Cancel
-          </Button>
-        </View>
-      }
-      contentContainerStyle={styles.scrollViewContent}
-    />
-
+              <Text variant="titleMedium" style={[GLOBAL_STYLES.TITLE, styles.sectionTitle]}>
+                Words
+              </Text>
+            </>
+          }
+          ListFooterComponent={
+            <View style={styles.buttonContainer}>
+              <Button
+                mode="contained"
+                onPress={() => {
+                  handleSave();
+                }}
+                style={styles.button}
+                disabled={!title.trim() || words.length === 0}
+                buttonColor={PURPLE}
+                textColor={YELLOW}
+                labelStyle={FONT.MONTSERRAT_700BOLD}
+              >
+                Save Deck
+              </Button>
+              <Button
+                mode="outlined"
+                onPress={() => {
+                  router.push('/decks');
+                }}
+                style={styles.button}
+                textColor={PURPLE}
+                labelStyle={FONT.MONTSERRAT_700BOLD}
+              >
+                Cancel
+              </Button>
+            </View>
+          }
+          contentContainerStyle={styles.scrollViewContent}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    display: 'flex',
-  },
-  scrollView: {
-    flex: 1,
-  },
   scrollViewContent: {
     padding: 16,
   },
-  deckTitleSize: {
-    fontSize: 18,
-  },
   input: {
     marginBottom: 16,
+    backgroundColor: 'white',
   },
   sectionTitle: {
     marginBottom: 16,
@@ -191,9 +202,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'white',
     marginBottom: 8,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: PURPLE,
   },
   addWordContainer: {
     flexDirection: 'row',
@@ -203,13 +216,11 @@ export const styles = StyleSheet.create({
   },
   wordInput: {
     flex: 1,
+    backgroundColor: 'white',
   },
   buttonContainer: {
     padding: 16,
     gap: 8,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
   },
   button: {
     width: '100%',

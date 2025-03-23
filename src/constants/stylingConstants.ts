@@ -45,11 +45,27 @@ export const FONT = StyleSheet.create({
   },
 })
 
+// Stylesheets: Colors
+export const COLORS = {
+  SURFACE: {
+    backgroundColor: NAVY
+  },
+  PRIMARY: {
+    color: NAVY
+  },
+  SECONDARY: {
+    color: YELLOW
+  },
+  TERTIARY: {
+    color: YELLOW
+  },
+}
+
 // Stylesheets: Global
 export const GLOBAL_STYLES = StyleSheet.create({
   BACKGROUND_CONTAINER: {
     flex: 1,
-    backgroundColor: NAVY,
+    ...COLORS.SURFACE,
   },
   SAFE_AREA_CONTAINER: {
     flex: 1,
