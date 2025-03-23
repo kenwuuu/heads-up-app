@@ -6,7 +6,7 @@ import {useDeckStore} from '../src/zustand_state_store/deckStore';
 import {Deck, Word} from '../decks/decks';
 import * as Haptics from 'expo-haptics';
 import {useFocusEffect} from '@react-navigation/native';
-import {FONT, GLOBAL_STYLES, NAVY, PURPLE, YELLOW} from "@/src/constants/stylingConstants";
+import {FONT, GLOBAL_STYLES, PURPLE, YELLOW} from "@/src/constants/stylingConstants";
 import {SafeAreaView} from "react-native-safe-area-context";
 
 export default function EditDeckScreen() {
@@ -83,7 +83,7 @@ export default function EditDeckScreen() {
           data={words}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
-            <View style={styles.wordItem}>
+            <View style={[styles.wordItem]}>
               <Text variant="bodyLarge" style={GLOBAL_STYLES.BODY}>{item.text}</Text>
               <IconButton
                 icon="delete"
@@ -107,7 +107,7 @@ export default function EditDeckScreen() {
                 onChangeText={setTitle}
                 style={styles.input}
                 textColor={PURPLE}
-                theme={{ colors: { primary: PURPLE, onSurfaceVariant: PURPLE } }}
+                theme={{colors: {primary: PURPLE, onSurfaceVariant: PURPLE}}}
               />
               <TextInput
                 label="Description"
@@ -115,7 +115,7 @@ export default function EditDeckScreen() {
                 onChangeText={setDescription}
                 style={styles.input}
                 textColor={PURPLE}
-                theme={{ colors: { primary: PURPLE, onSurfaceVariant: PURPLE } }}
+                theme={{colors: {primary: PURPLE, onSurfaceVariant: PURPLE}}}
               />
 
               <Text variant="titleMedium" style={[GLOBAL_STYLES.TITLE, styles.sectionTitle]}>
@@ -129,7 +129,7 @@ export default function EditDeckScreen() {
                   onChangeText={setNewWord}
                   style={styles.wordInput}
                   textColor={PURPLE}
-                  theme={{ colors: { primary: PURPLE, onSurfaceVariant: PURPLE } }}
+                  theme={{colors: {primary: PURPLE, onSurfaceVariant: PURPLE}}}
                 />
                 <Button
                   onPress={() => {
@@ -202,11 +202,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 8,
     paddingHorizontal: 16,
-    backgroundColor: 'white',
     marginBottom: 8,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: PURPLE,
+    ...GLOBAL_STYLES.CONTAINER,
   },
   addWordContainer: {
     flexDirection: 'row',
